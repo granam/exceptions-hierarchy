@@ -7,34 +7,22 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase {
      * @test
      * @expectedException \Granam\Exceptions\Runtime
      */
-    public function can_be_thrown()
+    public function can_marks_exception_and_be_catch()
     {
-        throw new Runtime;
-    }
-
-    /**
-     * @test
-     * @expectedException \RuntimeException
-     */
-    public function origins_at_standard_runtime_exception()
-    {
-        throw new Runtime;
+        throw new TestRuntime;
     }
 
     /**
      * @test
      * @expectedException \Granam\Exceptions\Exception
      */
-    public function is_marked_by_local_interface()
+    public function origins_at_basic_local_interface()
     {
-        throw new Runtime;
+        throw new TestRuntime;
     }
+}
 
+/** inner */
+class TestRuntime extends \RuntimeException implements Runtime {
 
-    /** @test */
-    public function is_not_logic()
-    {
-        $runtime = new Runtime();
-        $this->assertFalse(is_a($runtime, '\Granam\Exceptions\Logic'));
-    }
 }

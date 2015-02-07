@@ -7,33 +7,22 @@ class LogicTest extends \PHPUnit_Framework_TestCase {
      * @test
      * @expectedException \Granam\Exceptions\Logic
      */
-    public function can_be_thrown()
+    public function can_marks_exception_and_be_catch()
     {
-        throw new Logic;
-    }
-
-    /**
-     * @test
-     * @expectedException \LogicException
-     */
-    public function origins_at_standard_logic_exception()
-    {
-        throw new Logic;
+        throw new TestLogic;
     }
 
     /**
      * @test
      * @expectedException \Granam\Exceptions\Exception
      */
-    public function is_marked_by_local_interface()
+    public function origins_at_basic_local_interface()
     {
-        throw new Logic;
+        throw new TestLogic;
     }
+}
 
-    /** @test */
-    public function is_not_runtime()
-    {
-        $logic = new Logic();
-        $this->assertFalse(is_a($logic, '\Granam\Exceptions\Runtime'));
-    }
+/** inner */
+class TestLogic extends \LogicException implements Logic {
+
 }

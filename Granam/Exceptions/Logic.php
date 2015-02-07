@@ -1,7 +1,7 @@
 <?php
 namespace Granam\Exceptions;
 
-class Logic extends \LogicException implements Exception
+interface Logic extends Exception
 {
 
 }
