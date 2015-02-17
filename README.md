@@ -13,13 +13,14 @@ The good way how to achieve that is keep exceptions hierarchy clean and clear.
  - include this interface in **every** exception you produce.
     - by that, anyone can catch exceptions from your project in his project. By single catch.
  - learn the difference between logic and runtime exception
+    - the base distinction is the logic exception can be detected at compile time (for easy example by IDE), the runtime exception can not - it can occurs only in some combination of data and environment
     - logic exception should occurs if definitely there is an mistake in the application itself
         - that exception tells you: fix it, it is somewhere in the code
     - runtime exception is everything else of course
         - that means there is nothing to fix
     - is it so simple, with clean borders?
         - of course not
-        - but you can catch all the logic exceptions into folder Bugs and runtime ones into BulletproofFailure
+        - but like that you can catch all the logic exceptions into folder Bugs and runtime ones into BulletproofFailure
 
 ####In short
 *Runtime exception* should occurs if something is wrong from **outside**.
