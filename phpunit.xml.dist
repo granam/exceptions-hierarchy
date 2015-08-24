@@ -12,11 +12,14 @@
         colors="true"
         >
     <testsuite name="all">
-        <directory>./Tests</directory>
+        <directory>./Granam/Exceptions/Tests</directory>
     </testsuite>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true" addUncoveredFilesFromWhitelist="true">
             <directory>./Granam</directory>
+            <exclude>
+                <directory>./Granam/Exceptions/Tests</directory>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>
