@@ -24,11 +24,6 @@ class InvalidRootNamespaceTest extends AbstractTestOfExceptionsHierarchy
         );
     }
 
-    public function My_tag_interfaces_are_in_hierarchy()
-    {
-        return; // disabled
-    }
-
     public function My_exceptions_are_in_family_tree()
     {
         return; // disabled

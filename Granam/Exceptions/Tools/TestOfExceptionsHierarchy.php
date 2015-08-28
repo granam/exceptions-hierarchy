@@ -65,7 +65,7 @@ class TestOfExceptionsHierarchy
         return $this->exceptionsSubDir;
     }
 
-    public function My_tag_interfaces_are_in_hierarchy($testedNamespace = null)
+    protected function My_tag_interfaces_are_in_hierarchy($testedNamespace = null)
     {
         if (!$testedNamespace) {
             $testedNamespace = $this->getTestedNamespace();
@@ -132,9 +132,7 @@ class TestOfExceptionsHierarchy
     {
         $parentNamespace = $this->getTestedNamespace();
         do {
-            if ($parentNamespace !== $this->getTestedNamespace()) { // current level should be tested explicitly
-                $this->My_tag_interfaces_are_in_hierarchy($parentNamespace);
-            }
+            $this->My_tag_interfaces_are_in_hierarchy($parentNamespace);
             $directory = $this->getNamespaceDirectory($parentNamespace);
             foreach ($this->getCustomExceptionsFrom($directory) as $customException) {
                 $this->My_exceptions_are_properly_tagged($customException);
@@ -158,13 +156,13 @@ class TestOfExceptionsHierarchy
 
     protected function getCustomExceptionsFrom($directory)
     {
-        $customExceptions = [];
+        $customExceptions = array();
         foreach (scandir($directory) as $file) {
             $filePath = $directory . DIRECTORY_SEPARATOR . $file;
             if (is_file($filePath)) {
                 $content = file_get_contents($filePath);
                 if (preg_match('~(namespace\s+(?<namespace>(\w+(\\\)?)+)).+(class|interface)\s+(?<className>\w+)~s', $content, $matches)) {
-                    if (!in_array($matches['className'], ['Exception', 'Runtime', 'Logic'])) {
+                    if (!in_array($matches['className'], array('Exception', 'Runtime', 'Logic'))) {
                         $customExceptions[] = $matches['namespace'] . '\\' . $matches['className'];
                     }
                 }

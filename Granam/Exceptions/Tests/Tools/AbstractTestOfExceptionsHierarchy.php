@@ -40,14 +40,6 @@ abstract class AbstractTestOfExceptionsHierarchy extends \PHPUnit_Framework_Test
     /**
      * @test
      */
-    public function My_tag_interfaces_are_in_hierarchy()
-    {
-        $this->getTestOfExceptionsHierarchy()->My_tag_interfaces_are_in_hierarchy();
-    }
-
-    /**
-     * @test
-     */
     public function My_exceptions_are_in_family_tree()
     {
         $this->getTestOfExceptionsHierarchy()->My_exceptions_are_in_family_tree();
