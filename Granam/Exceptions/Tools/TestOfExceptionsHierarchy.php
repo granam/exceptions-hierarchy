@@ -57,7 +57,7 @@ class TestOfExceptionsHierarchy
         return $this->rootNamespace;
     }
 
-    /**
+    /**pu
      * @return string
      */
     protected function getExceptionsSubDir()
@@ -70,12 +70,28 @@ class TestOfExceptionsHierarchy
         if (!$testedNamespace) {
             $testedNamespace = $this->getTestedNamespace();
         }
+
         $exceptionInterface = $this->assembleExceptionInterfaceClass($testedNamespace, $this->getExceptionsSubDir());
+        $this->checkExceptionInterface($exceptionInterface);
+
+        $runtimeInterface = $this->assembleRuntimeInterfaceClass($testedNamespace, $this->getExceptionsSubDir());
+        $this->checkRuntimeInterface($runtimeInterface, $exceptionInterface);
+
+        $logicInterface = $this->assembleLogicInterfaceClass($testedNamespace, $this->getExceptionsSubDir());
+        $this->checkLogicInterface($logicInterface, $exceptionInterface);
+
+        $this->checkInterfaceCollision($runtimeInterface, $logicInterface);
+    }
+
+    private function checkExceptionInterface($exceptionInterface)
+    {
         if (!interface_exists($exceptionInterface)) {
             throw new Exceptions\TagInterfaceNotFound("Tag interface $exceptionInterface not found");
         }
+    }
 
-        $runtimeInterface = $this->assembleRuntimeInterfaceClass($testedNamespace, $this->getExceptionsSubDir());
+    private function checkRuntimeInterface($runtimeInterface, $exceptionInterface)
+    {
         if (!interface_exists($runtimeInterface)) {
             throw new Exceptions\TagInterfaceNotFound("Runtime tag interface $runtimeInterface not found");
         }
@@ -84,8 +100,10 @@ class TestOfExceptionsHierarchy
                 "Runtime tag interface $runtimeInterface is not a child of $exceptionInterface"
             );
         }
+    }
 
-        $logicInterface = $this->assembleLogicInterfaceClass($testedNamespace, $this->getExceptionsSubDir());
+    private function checkLogicInterface($logicInterface, $exceptionInterface)
+    {
         if (!interface_exists($logicInterface)) {
             throw new Exceptions\TagInterfaceNotFound("Logic tag interface $logicInterface not found");
         }
@@ -94,7 +112,10 @@ class TestOfExceptionsHierarchy
                 "Logic tag interface $logicInterface is not a child of $exceptionInterface"
             );
         }
+    }
 
+    private function checkInterfaceCollision($runtimeInterface, $logicInterface)
+    {
         if (is_a($runtimeInterface, $logicInterface, true)) {
             throw new Exceptions\InvalidTagInterfaceHierarchy(
                 "Runtime tag interface $runtimeInterface can not be a logic tag"
@@ -137,13 +158,13 @@ class TestOfExceptionsHierarchy
 
     protected function getCustomExceptionsFrom($directory)
     {
-        $customExceptions = array();
+        $customExceptions = [];
         foreach (scandir($directory) as $file) {
             $filePath = $directory . DIRECTORY_SEPARATOR . $file;
             if (is_file($filePath)) {
                 $content = file_get_contents($filePath);
                 if (preg_match('~(namespace\s+(?<namespace>(\w+(\\\)?)+)).+(class|interface)\s+(?<className>\w+)~s', $content, $matches)) {
-                    if (!in_array($matches['className'], array('Exception', 'Runtime', 'Logic'))) {
+                    if (!in_array($matches['className'], ['Exception', 'Runtime', 'Logic'])) {
                         $customExceptions[] = $matches['namespace'] . '\\' . $matches['className'];
                     }
                 }
@@ -156,18 +177,19 @@ class TestOfExceptionsHierarchy
     protected function My_exceptions_are_properly_tagged($exceptionClass)
     {
         $namespace = $this->parseNamespaceFromClass($exceptionClass);
+        $isBaseTagged = is_a($exceptionClass, $this->assembleExceptionInterfaceClass($namespace), true);
+        if (!$isBaseTagged) {
+            throw new Exceptions\ExceptionIsNotTaggedProperly(
+                (class_exists($exceptionClass) ? 'Class' : 'Tag interface')
+                . " $exceptionClass has to be tagged by Exception interface"
+            );
+        }
         $isRuntime = is_a($exceptionClass, $this->assembleRuntimeInterfaceClass($namespace), true);
         $isLogic = is_a($exceptionClass, $this->assembleLogicInterfaceClass($namespace), true);
         if ($isRuntime && $isLogic) {
             throw new Exceptions\ExceptionIsNotTaggedProperly(
                 "Exception " . (class_exists($exceptionClass) ? 'class' : 'interface')
                 . " $exceptionClass can not be tagged by Runtime interface and Logic interface at the same time"
-            );
-        }
-        if (!is_a($exceptionClass, $this->assembleExceptionInterfaceClass($namespace), true)) {
-            throw new Exceptions\ExceptionIsNotTaggedProperly(
-                (class_exists($exceptionClass) ? 'Class' : 'Tag interface')
-                . " $exceptionClass has to be tagged by Exception interface"
             );
         }
         if (!$isRuntime && !$isLogic) {
