@@ -1,7 +1,7 @@
 <?php
 namespace Granam\Exceptions\Tests\Tools\DummyExceptionsHierarchy\InheritedTags;
 
-interface Exception
+interface Exception extends \Granam\Exceptions\Tests\Tools\DummyExceptionsHierarchy\Exception
 {
 
 }

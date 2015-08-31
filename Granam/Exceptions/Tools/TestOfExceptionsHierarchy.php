@@ -65,12 +65,8 @@ class TestOfExceptionsHierarchy
         return $this->exceptionsSubDir;
     }
 
-    protected function My_tag_interfaces_are_in_hierarchy($testedNamespace = null)
+    protected function My_tag_interfaces_are_in_hierarchy($testedNamespace = null, array $childNamespaces)
     {
-        if (!$testedNamespace) {
-            $testedNamespace = $this->getTestedNamespace();
-        }
-
         $exceptionInterface = $this->assembleExceptionInterfaceClass($testedNamespace, $this->getExceptionsSubDir());
         $this->checkExceptionInterface($exceptionInterface);
 
@@ -81,6 +77,8 @@ class TestOfExceptionsHierarchy
         $this->checkLogicInterface($logicInterface, $exceptionInterface);
 
         $this->checkInterfaceCollision($runtimeInterface, $logicInterface);
+
+        $this->checkChildInterfaces($childNamespaces, $exceptionInterface, $runtimeInterface, $logicInterface);
     }
 
     private function checkExceptionInterface($exceptionInterface)
@@ -128,18 +126,47 @@ class TestOfExceptionsHierarchy
         }
     }
 
+    private function checkChildInterfaces(array $childNamespaces, $exceptionInterface, $runtimeInterface, $logicInterface)
+    {
+        foreach ($childNamespaces as $childNamespace) {
+            $childExceptionInterface = $this->assembleExceptionInterfaceClass($childNamespace, $this->getExceptionsSubDir());
+            if (!is_a($childExceptionInterface, $exceptionInterface, true)) {
+                throw new Exceptions\InvalidExceptionHierarchy(
+                    "Tag $childExceptionInterface should be child of $exceptionInterface"
+                );
+            }
+
+            $childRuntimeInterface = $this->assembleRuntimeInterfaceClass($childNamespace, $this->getExceptionsSubDir());
+            if (!is_a($childRuntimeInterface, $runtimeInterface, true)) {
+                throw new Exceptions\InvalidExceptionHierarchy(
+                    "Tag $childRuntimeInterface should be child of $runtimeInterface"
+                );
+            }
+
+            $childLogicInterface = $this->assembleLogicInterfaceClass($childNamespace, $this->getExceptionsSubDir());
+            if (!is_a($childLogicInterface, $logicInterface, true)) {
+                throw new Exceptions\InvalidExceptionHierarchy(
+                    "Tag $childLogicInterface should be child of $logicInterface"
+                );
+            }
+        }
+    }
+
+
     public function My_exceptions_are_in_family_tree()
     {
-        $parentNamespace = $this->getTestedNamespace();
+        $childNamespaces = array();
+        $testedNamespace = $this->getTestedNamespace();
         do {
-            $this->My_tag_interfaces_are_in_hierarchy($parentNamespace);
-            $directory = $this->getNamespaceDirectory($parentNamespace);
+            $this->My_tag_interfaces_are_in_hierarchy($testedNamespace, $childNamespaces);
+            $directory = $this->getNamespaceDirectory($testedNamespace);
             foreach ($this->getCustomExceptionsFrom($directory) as $customException) {
                 $this->My_exceptions_are_properly_tagged($customException);
             }
-            $alreadyInRoot = $parentNamespace === $this->getRootNamespace();
-            $parentNamespace = $this->parseParentNamespace($parentNamespace);
-        } while (!$alreadyInRoot && $parentNamespace);
+            $alreadyInRoot = $testedNamespace === $this->getRootNamespace();
+            $childNamespaces[] = $testedNamespace;
+            $testedNamespace = $this->parseParentNamespace($testedNamespace);
+        } while (!$alreadyInRoot && $testedNamespace);
     }
 
     protected function getNamespaceDirectory($namespace)
