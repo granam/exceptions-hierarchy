@@ -1,7 +1,7 @@
 <?php
 namespace Granam\Exceptions\Tests\Tools;
 
-class WithoutRuntimeInterfaceTest extends AbstractTestOfExceptionsHierarchy
+class WithoutRuntimeTagTest extends AbstractTestOfExceptionsHierarchy
 {
 
     /**
@@ -9,7 +9,7 @@ class WithoutRuntimeInterfaceTest extends AbstractTestOfExceptionsHierarchy
      *
      * @test
      * @expectedException \Granam\Exceptions\Tools\Exceptions\TagInterfaceNotFound
-     * @expectedExceptionMessageRegExp ~^Runtime tag interface .+ not found$~
+     * @expectedExceptionMessageRegExp ~^Runtime tag interface .+\\Runtime not found$~
      */
     public function My_exceptions_are_in_family_tree()
     {
@@ -18,7 +18,7 @@ class WithoutRuntimeInterfaceTest extends AbstractTestOfExceptionsHierarchy
 
     protected function getTestedNamespace()
     {
-        return __NAMESPACE__ . '\DummyExceptionsHierarchy\WithoutRuntimeInterface';
+        return __NAMESPACE__ . '\DummyExceptionsHierarchy\WithoutRuntimeTag';
     }
 
     protected function getExceptionsSubDir()

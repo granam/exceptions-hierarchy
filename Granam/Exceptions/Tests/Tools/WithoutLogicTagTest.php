@@ -1,7 +1,7 @@
 <?php
 namespace Granam\Exceptions\Tests\Tools;
 
-class WithoutLogicInterfaceTest extends AbstractTestOfExceptionsHierarchy
+class WithoutLogicTagTest extends AbstractTestOfExceptionsHierarchy
 {
 
     /**
@@ -9,7 +9,7 @@ class WithoutLogicInterfaceTest extends AbstractTestOfExceptionsHierarchy
      *
      * @test
      * @expectedException \Granam\Exceptions\Tools\Exceptions\TagInterfaceNotFound
-     * @expectedExceptionMessageRegExp ~^Logic tag interface .+ not found$~
+     * @expectedExceptionMessageRegExp ~^Logic tag interface .+\\Logic not found$~
      */
     public function My_exceptions_are_in_family_tree()
     {
@@ -18,7 +18,7 @@ class WithoutLogicInterfaceTest extends AbstractTestOfExceptionsHierarchy
 
     protected function getTestedNamespace()
     {
-        return __NAMESPACE__ . '\DummyExceptionsHierarchy\WithoutLogicInterface';
+        return __NAMESPACE__ . '\DummyExceptionsHierarchy\WithoutLogicTag';
     }
 
     protected function getExceptionsSubDir()
