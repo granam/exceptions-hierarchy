@@ -171,12 +171,10 @@ class TestOfExceptionsHierarchy
 
     protected function getNamespaceDirectory($namespace)
     {
-        $rootNamespace = preg_replace('~^(\\\?\w+).*~', '$1', $namespace);
-        $reflection = new \ReflectionClass($this);
-        $filename = $reflection->getFileName();
-        $dir = dirname($filename);
-        $baseDir = preg_replace('~(' . preg_quote($rootNamespace) . ').*~', '', str_replace(DIRECTORY_SEPARATOR, '\\', $dir));
-        $namespaceDir = str_replace('\\', DIRECTORY_SEPARATOR, $baseDir . $namespace);
+        $exceptionTag = $this->assembleExceptionInterfaceClass($namespace, $this->getExceptionsSubDir());
+        $exceptionTagReflection = new \ReflectionClass($exceptionTag);
+        $filename = $exceptionTagReflection->getFileName();
+        $namespaceDir = dirname($filename);
 
         return $namespaceDir;
     }
