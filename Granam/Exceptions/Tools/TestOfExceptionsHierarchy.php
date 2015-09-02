@@ -15,9 +15,11 @@ class TestOfExceptionsHierarchy
 
     public function __construct($testedNamespace, $rootNamespace, $exceptionsSubDir = 'Exceptions')
     {
-        $this->testedNamespace = $this->normalizeNamespace($testedNamespace);
+        $testedNamespace = $this->normalizeNamespace($testedNamespace);
         $rootNamespace = $this->normalizeNamespace($rootNamespace);
-        $this->checkRootNamespace($rootNamespace, $this->getTestedNamespace());
+        $this->checkRootNamespace($rootNamespace, $testedNamespace);
+
+        $this->testedNamespace = $testedNamespace;
         $this->rootNamespace = $rootNamespace;
         $this->exceptionsSubDir = $exceptionsSubDir;
     }
@@ -29,6 +31,12 @@ class TestOfExceptionsHierarchy
      */
     protected function normalizeNamespace($namespace)
     {
+        if (!is_string($namespace)) {
+            throw new Exceptions\MissingNamespace(
+                'Namespace can be empty string for root, but given ' . var_export($namespace, true)
+            );
+        }
+
         return '\\' . trim($namespace, '\\');
     }
 
