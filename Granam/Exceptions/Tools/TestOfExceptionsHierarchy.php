@@ -13,29 +13,30 @@ class TestOfExceptionsHierarchy
     private $exceptionsSubDir;
 
     /** @var string|bool */
-    private $externalParentTag;
+    private $externalRootNamespace;
 
     /**
      * @param string $testedNamespace
      * @param string $rootNamespace
      * @param string $exceptionsSubDir
-     * @param string|bool $externalParentTag = false
+     * @param string|bool $externalParentRootNamespace = false
      */
     public function __construct(
         $testedNamespace,
         $rootNamespace,
         $exceptionsSubDir = 'Exceptions',
-        $externalParentTag = false
+        $externalParentRootNamespace = false
     )
     {
         $testedNamespace = $this->normalizeNamespace($testedNamespace);
         $rootNamespace = $this->normalizeNamespace($rootNamespace);
         $this->checkRootNamespace($rootNamespace, $testedNamespace);
+        $this->checkExternalRootNamespace($externalParentRootNamespace, $rootNamespace);
 
         $this->testedNamespace = $testedNamespace;
         $this->rootNamespace = $rootNamespace;
         $this->exceptionsSubDir = $exceptionsSubDir;
-        $this->externalParentTag = $externalParentTag;
+        $this->externalRootNamespace = $externalParentRootNamespace;
     }
 
     /**
@@ -63,6 +64,19 @@ class TestOfExceptionsHierarchy
         }
     }
 
+    protected function checkExternalRootNamespace($externalRootNamespace, $rootNamespace)
+    {
+        if (!$externalRootNamespace) {
+            return;
+        }
+        if (strpos($rootNamespace, $externalRootNamespace)) {
+            throw new Exceptions\RootNamespaceHasToBeSuperior(
+                "External root namespace $externalRootNamespace should not be subordinate to local root namespace $rootNamespace"
+            );
+        }
+        $this->My_tag_interfaces_are_in_hierarchy($externalRootNamespace, []);
+    }
+
     /**
      * @return string
      */
@@ -79,7 +93,7 @@ class TestOfExceptionsHierarchy
         return $this->rootNamespace;
     }
 
-    /**pu
+    /**
      * @return string
      */
     protected function getExceptionsSubDir()
@@ -87,16 +101,27 @@ class TestOfExceptionsHierarchy
         return $this->exceptionsSubDir;
     }
 
+    /**
+     * @return bool|string
+     */
+    protected function getExternalRootNamespace()
+    {
+        return $this->externalRootNamespace;
+    }
+
     protected function My_tag_interfaces_are_in_hierarchy($testedNamespace, array $childNamespaces)
     {
         $exceptionInterface = $this->assembleExceptionInterfaceClass($testedNamespace, $this->getExceptionsSubDir());
-        $this->checkExceptionInterface($exceptionInterface, $this->externalParentTag);
+        $externalRootExceptionInterface = $this->getExternalRootExceptionInterfaceClass();
+        $this->checkExceptionInterface($exceptionInterface, $externalRootExceptionInterface);
 
         $runtimeInterface = $this->assembleRuntimeInterfaceClass($testedNamespace, $this->getExceptionsSubDir());
-        $this->checkRuntimeInterface($runtimeInterface, $exceptionInterface);
+        $externalRootRuntimeInterface = $this->getExternalRootRuntimeInterfaceClass();
+        $this->checkRuntimeInterface($runtimeInterface, $exceptionInterface, $externalRootRuntimeInterface);
 
         $logicInterface = $this->assembleLogicInterfaceClass($testedNamespace, $this->getExceptionsSubDir());
-        $this->checkLogicInterface($logicInterface, $exceptionInterface);
+        $externalRootLogicInterface = $this->getExternalRootLogicInterfaceClass();
+        $this->checkLogicInterface($logicInterface, $exceptionInterface, $externalRootLogicInterface);
 
         $this->checkInterfaceCollision($runtimeInterface, $logicInterface);
 
@@ -104,22 +129,61 @@ class TestOfExceptionsHierarchy
     }
 
     /**
-     * @param $exceptionInterface
-     * @param string|false $externalParentTag
+     * @return bool|string
      */
-    private function checkExceptionInterface($exceptionInterface, $externalParentTag)
+    private function getExternalRootExceptionInterfaceClass()
+    {
+        $externalRootNamespace = $this->getExternalRootNamespace();
+        if (!$externalRootNamespace) {
+            return false;
+        }
+
+        return $this->assembleExceptionInterfaceClass($externalRootNamespace, $this->getExceptionsSubDir());
+    }
+
+    /**
+     * @return bool|string
+     */
+    private function getExternalRootRuntimeInterfaceClass()
+    {
+        $externalRootNamespace = $this->getExternalRootNamespace();
+        if (!$externalRootNamespace) {
+            return false;
+        }
+
+        return $this->assembleRuntimeInterfaceClass($externalRootNamespace, $this->getExceptionsSubDir());
+    }
+
+    /**
+     * @return bool|string
+     */
+    private function getExternalRootLogicInterfaceClass()
+    {
+        $externalRootNamespace = $this->getExternalRootNamespace();
+        if (!$externalRootNamespace) {
+            return false;
+        }
+
+        return $this->assembleLogicInterfaceClass($externalRootNamespace, $this->getExceptionsSubDir());
+    }
+
+    /**
+     * @param $exceptionInterface
+     * @param string|false $externalRootExceptionInterface
+     */
+    private function checkExceptionInterface($exceptionInterface, $externalRootExceptionInterface)
     {
         if (!interface_exists($exceptionInterface)) {
             throw new Exceptions\TagInterfaceNotFound("Tag interface $exceptionInterface not found");
         }
-        if ($externalParentTag && !is_a($exceptionInterface, $externalParentTag, true)) {
+        if ($externalRootExceptionInterface && !is_a($exceptionInterface, $externalRootExceptionInterface, true)) {
             throw new Exceptions\InvalidTagInterfaceHierarchy(
-                "Tag interface $exceptionInterface should extends external parent tag interface $externalParentTag"
+                "Tag interface $exceptionInterface should extends external parent tag interface $externalRootExceptionInterface"
             );
         }
     }
 
-    private function checkRuntimeInterface($runtimeInterface, $exceptionInterface)
+    private function checkRuntimeInterface($runtimeInterface, $exceptionInterface, $externalRootRuntimeInterface)
     {
         if (!interface_exists($runtimeInterface)) {
             throw new Exceptions\TagInterfaceNotFound("Runtime tag interface $runtimeInterface not found");
@@ -129,9 +193,14 @@ class TestOfExceptionsHierarchy
                 "Runtime tag interface $runtimeInterface is not a child of $exceptionInterface"
             );
         }
+        if ($externalRootRuntimeInterface && !is_a($runtimeInterface, $externalRootRuntimeInterface, true)) {
+            throw new Exceptions\InvalidTagInterfaceHierarchy(
+                "Tag interface $runtimeInterface should extends external parent tag interface $externalRootRuntimeInterface"
+            );
+        }
     }
 
-    private function checkLogicInterface($logicInterface, $exceptionInterface)
+    private function checkLogicInterface($logicInterface, $exceptionInterface, $externalRootLogicInterface)
     {
         if (!interface_exists($logicInterface)) {
             throw new Exceptions\TagInterfaceNotFound("Logic tag interface $logicInterface not found");
@@ -139,6 +208,11 @@ class TestOfExceptionsHierarchy
         if (!is_a($logicInterface, $exceptionInterface, true)) {
             throw new Exceptions\InvalidTagInterfaceHierarchy(
                 "Logic tag interface $logicInterface is not a child of $exceptionInterface"
+            );
+        }
+        if ($externalRootLogicInterface && !is_a($logicInterface, $externalRootLogicInterface, true)) {
+            throw new Exceptions\InvalidTagInterfaceHierarchy(
+                "Tag interface $logicInterface should extends external parent tag interface $externalRootLogicInterface"
             );
         }
     }

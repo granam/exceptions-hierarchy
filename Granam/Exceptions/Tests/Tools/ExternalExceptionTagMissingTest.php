@@ -1,11 +1,11 @@
 <?php
 namespace Granam\Exceptions\Tests\Tools;
 
-class ExternalParentTagMissingTest extends AbstractTestOfExceptionsHierarchy
+class ExternalExceptionTagMissingTest extends AbstractTestOfExceptionsHierarchy
 {
     protected function getTestedNamespace()
     {
-        return __NAMESPACE__ . '\DummyExceptionsHierarchy\ExternalParentTagMissing';
+        return __NAMESPACE__ . '\DummyExceptionsHierarchy\ExternalExceptionTagMissing';
     }
 
     protected function getRootNamespace()
@@ -18,10 +18,10 @@ class ExternalParentTagMissingTest extends AbstractTestOfExceptionsHierarchy
         return '';
     }
 
-    protected function getExternalParentTag()
+    protected function getExternalParentRootNamespace()
     {
         // skipping some namespace chain up from root namespace
-        return '\Granam\Exceptions\Exception';
+        return '\Granam\Exceptions';
     }
 
     /**
