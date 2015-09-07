@@ -21,7 +21,7 @@ class ExternalParentTagTest extends AbstractTestOfExceptionsHierarchy
     protected function getExternalParentTag()
     {
         // skipping some namespace chain up from root namespace
-        return \Granam\Exceptions\Exception::class;
+        return '\Granam\Exceptions\Exception';
     }
 
 }
