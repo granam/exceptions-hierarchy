@@ -77,7 +77,7 @@ class TestOfExceptionsHierarchy
                 "External root namespace $externalRootNamespace should not be subordinate to local root namespace $rootNamespace"
             );
         }
-        $this->My_tag_interfaces_are_in_hierarchy($externalRootNamespace, $externalRootExceptionsSubDir, []);
+        $this->My_tag_interfaces_are_in_hierarchy($externalRootNamespace, $externalRootExceptionsSubDir, array());
     }
 
     /**
@@ -271,7 +271,7 @@ class TestOfExceptionsHierarchy
 
     public function My_exceptions_are_in_family_tree()
     {
-        $childNamespaces = [];
+        $childNamespaces = array();
         $testedNamespace = $this->getTestedNamespace();
         do {
             $this->My_tag_interfaces_are_in_hierarchy($testedNamespace, $this->getExceptionsSubDir(), $childNamespaces);
@@ -297,13 +297,13 @@ class TestOfExceptionsHierarchy
 
     protected function getCustomExceptionsFrom($directory)
     {
-        $customExceptions = [];
+        $customExceptions = array();
         foreach (scandir($directory) as $file) {
             $filePath = $directory . DIRECTORY_SEPARATOR . $file;
             if (is_file($filePath)) {
                 $content = file_get_contents($filePath);
                 if (preg_match('~(namespace\s+(?<namespace>(\w+(\\\)?)+)).+(class|interface)\s+(?<className>\w+)~s', $content, $matches)) {
-                    if (!in_array($matches['className'], ['Exception', 'Runtime', 'Logic'])) {
+                    if (!in_array($matches['className'], array('Exception', 'Runtime', 'Logic'))) {
                         $customExceptions[] = $matches['namespace'] . '\\' . $matches['className'];
                     }
                 }
