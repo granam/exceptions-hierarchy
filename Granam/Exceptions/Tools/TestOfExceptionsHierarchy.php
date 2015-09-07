@@ -3,7 +3,6 @@ namespace Granam\Exceptions\Tools;
 
 class TestOfExceptionsHierarchy
 {
-
     /** @var string */
     private $testedNamespace;
 
@@ -13,7 +12,21 @@ class TestOfExceptionsHierarchy
     /** @var string */
     private $exceptionsSubDir;
 
-    public function __construct($testedNamespace, $rootNamespace, $exceptionsSubDir = 'Exceptions')
+    /** @var string|bool */
+    private $externalParentTag;
+
+    /**
+     * @param string $testedNamespace
+     * @param string $rootNamespace
+     * @param string $exceptionsSubDir
+     * @param string|bool $externalParentTag = false
+     */
+    public function __construct(
+        $testedNamespace,
+        $rootNamespace,
+        $exceptionsSubDir = 'Exceptions',
+        $externalParentTag = false
+    )
     {
         $testedNamespace = $this->normalizeNamespace($testedNamespace);
         $rootNamespace = $this->normalizeNamespace($rootNamespace);
@@ -22,6 +35,7 @@ class TestOfExceptionsHierarchy
         $this->testedNamespace = $testedNamespace;
         $this->rootNamespace = $rootNamespace;
         $this->exceptionsSubDir = $exceptionsSubDir;
+        $this->externalParentTag = $externalParentTag;
     }
 
     /**
@@ -73,10 +87,10 @@ class TestOfExceptionsHierarchy
         return $this->exceptionsSubDir;
     }
 
-    protected function My_tag_interfaces_are_in_hierarchy($testedNamespace = null, array $childNamespaces)
+    protected function My_tag_interfaces_are_in_hierarchy($testedNamespace, array $childNamespaces)
     {
         $exceptionInterface = $this->assembleExceptionInterfaceClass($testedNamespace, $this->getExceptionsSubDir());
-        $this->checkExceptionInterface($exceptionInterface);
+        $this->checkExceptionInterface($exceptionInterface, $this->externalParentTag);
 
         $runtimeInterface = $this->assembleRuntimeInterfaceClass($testedNamespace, $this->getExceptionsSubDir());
         $this->checkRuntimeInterface($runtimeInterface, $exceptionInterface);
@@ -89,10 +103,19 @@ class TestOfExceptionsHierarchy
         $this->checkChildInterfaces($childNamespaces, $exceptionInterface, $runtimeInterface, $logicInterface);
     }
 
-    private function checkExceptionInterface($exceptionInterface)
+    /**
+     * @param $exceptionInterface
+     * @param string|false $externalParentTag
+     */
+    private function checkExceptionInterface($exceptionInterface, $externalParentTag)
     {
         if (!interface_exists($exceptionInterface)) {
             throw new Exceptions\TagInterfaceNotFound("Tag interface $exceptionInterface not found");
+        }
+        if ($externalParentTag && !is_a($exceptionInterface, $externalParentTag, true)) {
+            throw new Exceptions\InvalidTagInterfaceHierarchy(
+                "Tag interface $exceptionInterface should extends external parent tag interface $externalParentTag"
+            );
         }
     }
 
@@ -163,7 +186,7 @@ class TestOfExceptionsHierarchy
 
     public function My_exceptions_are_in_family_tree()
     {
-        $childNamespaces = array();
+        $childNamespaces = [];
         $testedNamespace = $this->getTestedNamespace();
         do {
             $this->My_tag_interfaces_are_in_hierarchy($testedNamespace, $childNamespaces);
@@ -189,13 +212,13 @@ class TestOfExceptionsHierarchy
 
     protected function getCustomExceptionsFrom($directory)
     {
-        $customExceptions = array();
+        $customExceptions = [];
         foreach (scandir($directory) as $file) {
             $filePath = $directory . DIRECTORY_SEPARATOR . $file;
             if (is_file($filePath)) {
                 $content = file_get_contents($filePath);
                 if (preg_match('~(namespace\s+(?<namespace>(\w+(\\\)?)+)).+(class|interface)\s+(?<className>\w+)~s', $content, $matches)) {
-                    if (!in_array($matches['className'], array('Exception', 'Runtime', 'Logic'))) {
+                    if (!in_array($matches['className'], ['Exception', 'Runtime', 'Logic'])) {
                         $customExceptions[] = $matches['namespace'] . '\\' . $matches['className'];
                     }
                 }

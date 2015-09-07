@@ -16,7 +16,8 @@ abstract class AbstractTestOfExceptionsHierarchy extends \PHPUnit_Framework_Test
         $this->testOfExceptionsHierarchy = new TestOfExceptionsHierarchy(
             $this->getTestedNamespace(),
             $this->getRootNamespace(),
-            $this->getExceptionsSubDir()
+            $this->getExceptionsSubDir(),
+            $this->getExternalParentTag()
         );
     }
 
@@ -35,6 +36,11 @@ abstract class AbstractTestOfExceptionsHierarchy extends \PHPUnit_Framework_Test
     protected function getExceptionsSubDir()
     {
         return 'Exceptions';
+    }
+
+    protected function getExternalParentTag()
+    {
+        return false;
     }
 
     /**
