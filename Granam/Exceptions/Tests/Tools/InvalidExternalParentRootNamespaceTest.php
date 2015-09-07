@@ -20,7 +20,7 @@ class InvalidExternalParentRootNamespaceTest extends AbstractTestOfExceptionsHie
         return '';
     }
 
-    protected function getExternalParentRootNamespace()
+    protected function getExternalRootNamespace()
     {
         // intentionally wrong external namespace
         return $this->getRootNamespace();
@@ -43,7 +43,7 @@ class InvalidExternalParentRootNamespaceTest extends AbstractTestOfExceptionsHie
             $this->getTestedNamespace(),
             $this->getRootNamespace(),
             $this->getExceptionsSubDir(),
-            $this->getExternalParentRootNamespace()
+            $this->getExternalRootNamespace()
         );
     }
 

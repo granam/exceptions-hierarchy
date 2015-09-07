@@ -15,13 +15,13 @@ class ExternalParentRootNamespaceTest extends AbstractTestOfExceptionsHierarchy
 
     protected function getExceptionsSubDir()
     {
-        return '';
+        return false;
     }
 
-    protected function getExternalParentRootNamespace()
+    protected function getExternalRootNamespace()
     {
         // skipping some namespace chain up from root namespace
-        return '\Granam\Exceptions';
+        return '\Granam';
     }
 
 }

@@ -18,10 +18,15 @@ class ExternalLogicTagMissingTest extends AbstractTestOfExceptionsHierarchy
         return '';
     }
 
-    protected function getExternalParentRootNamespace()
+    protected function getExternalRootNamespace()
     {
         // skipping some namespace chain up from root namespace
         return '\Granam\Exceptions';
+    }
+
+    protected function getExternalRootExceptionsSubDir()
+    {
+        return false;
     }
 
     /**
