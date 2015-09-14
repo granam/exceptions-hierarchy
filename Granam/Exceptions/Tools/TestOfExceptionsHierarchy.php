@@ -12,33 +12,33 @@ class TestOfExceptionsHierarchy
     /** @var string */
     private $exceptionsSubDir;
 
-    /** @var string|bool */
-    private $externalRootNamespace;
+    /** @var array|string[] */
+    private $externalRootNamespaces = array();
 
     /**
      * @param string $testedNamespace
      * @param string $rootNamespace
      * @param string|bool $exceptionsSubDir
-     * @param string|bool $externalRootNamespace = false
-     * @param string|bool $externalRootExceptionsSubDir = false
+     * @param array|string[] $externalRootNamespaces
+     * @param string|bool $externalRootExceptionsSubDir
      */
     public function __construct(
         $testedNamespace,
         $rootNamespace,
         $exceptionsSubDir = 'Exceptions',
-        $externalRootNamespace = false,
+        array $externalRootNamespaces = array(),
         $externalRootExceptionsSubDir = 'Exceptions'
     )
     {
         $testedNamespace = $this->normalizeNamespace($testedNamespace);
         $rootNamespace = $this->normalizeNamespace($rootNamespace);
         $this->checkRootNamespace($rootNamespace, $testedNamespace);
-        $this->checkExternalRootNamespace($externalRootNamespace, $externalRootExceptionsSubDir, $rootNamespace);
+        $this->checkExternalRootNamespaces($externalRootNamespaces, $externalRootExceptionsSubDir, $rootNamespace);
 
         $this->testedNamespace = $testedNamespace;
         $this->rootNamespace = $rootNamespace;
         $this->exceptionsSubDir = $exceptionsSubDir;
-        $this->externalRootNamespace = $externalRootNamespace;
+        $this->externalRootNamespaces = $externalRootNamespaces;
         $this->externalRootExceptionsSubDir = $externalRootExceptionsSubDir;
     }
 
@@ -67,17 +67,23 @@ class TestOfExceptionsHierarchy
         }
     }
 
-    protected function checkExternalRootNamespace($externalRootNamespace, $externalRootExceptionsSubDir, $rootNamespace)
+    protected function checkExternalRootNamespaces(array $externalRootNamespaces, $externalRootExceptionsSubDir, $rootNamespace)
     {
-        if (!$externalRootNamespace) {
+        if (!$externalRootNamespaces) {
             return;
         }
-        if (strpos($rootNamespace, $externalRootNamespace)) {
-            throw new Exceptions\RootNamespaceHasToBeSuperior(
-                "External root namespace $externalRootNamespace should not be subordinate to local root namespace $rootNamespace"
+        foreach ($externalRootNamespaces as $externalRootNamespace) {
+            if (strpos($rootNamespace, $externalRootNamespace)) {
+                throw new Exceptions\RootNamespaceHasToBeSuperior(
+                    "External root namespace $externalRootNamespace should not be subordinate to local root namespace $rootNamespace"
+                );
+            }
+            $this->My_tag_interfaces_are_in_hierarchy(
+                $externalRootNamespace,
+                $externalRootExceptionsSubDir,
+                array() // no child namespaces to check
             );
         }
-        $this->My_tag_interfaces_are_in_hierarchy($externalRootNamespace, $externalRootExceptionsSubDir, array());
     }
 
     /**
@@ -105,11 +111,11 @@ class TestOfExceptionsHierarchy
     }
 
     /**
-     * @return bool|string
+     * @return array|string[]
      */
-    protected function getExternalRootNamespace()
+    protected function getExternalRootNamespaces()
     {
-        return $this->externalRootNamespace;
+        return $this->externalRootNamespaces;
     }
 
     /**
@@ -120,19 +126,32 @@ class TestOfExceptionsHierarchy
         return $this->externalRootExceptionsSubDir;
     }
 
-    protected function My_tag_interfaces_are_in_hierarchy($testedNamespace, $exceptionsSubDir, array $childNamespaces)
+    protected function My_tag_interfaces_are_in_hierarchy(
+        $testedNamespace,
+        $exceptionsSubDir,
+        array $childNamespaces
+    )
     {
         $exceptionInterface = $this->assembleExceptionInterfaceClass($testedNamespace, $exceptionsSubDir);
-        $externalRootExceptionInterface = $this->getExternalRootExceptionInterfaceClass();
-        $this->checkExceptionInterface($exceptionInterface, $externalRootExceptionInterface);
+        $this->checkExceptionInterface($exceptionInterface, false);
+        $externalRootExceptionInterfaces = $this->getExternalRootExceptionInterfaceClasses();
+        foreach ($externalRootExceptionInterfaces as $externalRootExceptionInterface) {
+            $this->checkExceptionInterface($exceptionInterface, $externalRootExceptionInterface);
+        }
 
         $runtimeInterface = $this->assembleRuntimeInterfaceClass($testedNamespace, $exceptionsSubDir);
-        $externalRootRuntimeInterface = $this->getExternalRootRuntimeInterfaceClass();
-        $this->checkRuntimeInterface($runtimeInterface, $exceptionInterface, $externalRootRuntimeInterface);
+        $this->checkRuntimeInterface($runtimeInterface, $exceptionInterface, false);
+        $externalRootRuntimeInterfaces = $this->getExternalRootRuntimeInterfaceClasses();
+        foreach ($externalRootRuntimeInterfaces as $externalRootRuntimeInterface) {
+            $this->checkRuntimeInterface($runtimeInterface, $exceptionInterface, $externalRootRuntimeInterface);
+        }
 
         $logicInterface = $this->assembleLogicInterfaceClass($testedNamespace, $exceptionsSubDir);
-        $externalRootLogicInterface = $this->getExternalRootLogicInterfaceClass();
-        $this->checkLogicInterface($logicInterface, $exceptionInterface, $externalRootLogicInterface);
+        $this->checkLogicInterface($logicInterface, $exceptionInterface, false);
+        $externalRootLogicInterfaces = $this->getExternalRootLogicInterfaceClasses();
+        foreach ($externalRootLogicInterfaces as $externalRootLogicInterface) {
+            $this->checkLogicInterface($logicInterface, $exceptionInterface, $externalRootLogicInterface);
+        }
 
         $this->checkInterfaceCollision($runtimeInterface, $logicInterface);
 
@@ -140,42 +159,42 @@ class TestOfExceptionsHierarchy
     }
 
     /**
-     * @return bool|string
+     * @return array|string[]
      */
-    private function getExternalRootExceptionInterfaceClass()
+    private function getExternalRootExceptionInterfaceClasses()
     {
-        $externalRootNamespace = $this->getExternalRootNamespace();
-        if (!$externalRootNamespace) {
-            return false;
+        $classes = array();
+        foreach ($this->getExternalRootNamespaces() as $externalRootNamespace) {
+            $classes[] = $this->assembleExceptionInterfaceClass($externalRootNamespace, $this->getExternalRootExceptionsSubDir());
         }
 
-        return $this->assembleExceptionInterfaceClass($externalRootNamespace, $this->getExternalRootExceptionsSubDir());
+        return $classes;
     }
 
     /**
-     * @return bool|string
+     * @return array|string[]
      */
-    private function getExternalRootRuntimeInterfaceClass()
+    private function getExternalRootRuntimeInterfaceClasses()
     {
-        $externalRootNamespace = $this->getExternalRootNamespace();
-        if (!$externalRootNamespace) {
-            return false;
+        $classes = array();
+        foreach ($this->getExternalRootNamespaces() as $externalRootNamespace) {
+            $classes[] = $this->assembleRuntimeInterfaceClass($externalRootNamespace, $this->getExternalRootExceptionsSubDir());
         }
 
-        return $this->assembleRuntimeInterfaceClass($externalRootNamespace, $this->getExternalRootExceptionsSubDir());
+        return $classes;
     }
 
     /**
-     * @return bool|string
+     * @return array|string[]
      */
-    private function getExternalRootLogicInterfaceClass()
+    private function getExternalRootLogicInterfaceClasses()
     {
-        $externalRootNamespace = $this->getExternalRootNamespace();
-        if (!$externalRootNamespace) {
-            return false;
+        $classes = array();
+        foreach ($this->getExternalRootNamespaces() as $externalRootNamespace) {
+            $classes[] = $this->assembleLogicInterfaceClass($externalRootNamespace, $this->getExternalRootExceptionsSubDir());
         }
 
-        return $this->assembleLogicInterfaceClass($externalRootNamespace, $this->getExternalRootExceptionsSubDir());
+        return $classes;
     }
 
     /**

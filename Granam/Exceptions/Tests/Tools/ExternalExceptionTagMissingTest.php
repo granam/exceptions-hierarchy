@@ -18,15 +18,15 @@ class ExternalExceptionTagMissingTest extends AbstractTestOfExceptionsHierarchy
         return false;
     }
 
-    protected function getExternalRootNamespace()
+    protected function getExternalRootNamespaces()
     {
         // skipping some namespace chain up from root namespace
-        return '\Granam\Exceptions';
+        return array('\Granam');
     }
 
     protected function getExternalRootExceptionsSubDir()
     {
-        return false;
+        return 'Exceptions';
     }
 
     /**
@@ -36,6 +36,7 @@ class ExternalExceptionTagMissingTest extends AbstractTestOfExceptionsHierarchy
      */
     public function My_exceptions_are_in_family_tree()
     {
+        // overloading parent method annotations
         parent::My_exceptions_are_in_family_tree();
     }
 

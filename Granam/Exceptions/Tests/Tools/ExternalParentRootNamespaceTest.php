@@ -18,10 +18,10 @@ class ExternalParentRootNamespaceTest extends AbstractTestOfExceptionsHierarchy
         return false;
     }
 
-    protected function getExternalRootNamespace()
+    protected function getExternalRootNamespaces()
     {
         // skipping some namespace chain up from root namespace
-        return '\Granam';
+        return array('\Granam');
     }
 
 }

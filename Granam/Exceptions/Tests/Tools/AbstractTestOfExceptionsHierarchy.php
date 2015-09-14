@@ -17,7 +17,7 @@ abstract class AbstractTestOfExceptionsHierarchy extends \PHPUnit_Framework_Test
             $this->getTestedNamespace(),
             $this->getRootNamespace(),
             $this->getExceptionsSubDir(),
-            $this->getExternalRootNamespace(),
+            $this->getExternalRootNamespaces(),
             $this->getExternalRootExceptionsSubDir()
         );
     }
@@ -39,9 +39,12 @@ abstract class AbstractTestOfExceptionsHierarchy extends \PHPUnit_Framework_Test
         return 'Exceptions';
     }
 
-    protected function getExternalRootNamespace()
+    /**
+     * @return array|string[]
+     */
+    protected function getExternalRootNamespaces()
     {
-        return false;
+        return array();
     }
 
     protected function getExternalRootExceptionsSubDir()
