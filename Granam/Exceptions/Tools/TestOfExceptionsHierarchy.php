@@ -133,24 +133,33 @@ class TestOfExceptionsHierarchy
     )
     {
         $exceptionInterface = $this->assembleExceptionInterfaceClass($testedNamespace, $exceptionsSubDir);
-        $this->checkExceptionInterface($exceptionInterface, false);
         $externalRootExceptionInterfaces = $this->getExternalRootExceptionInterfaceClasses();
-        foreach ($externalRootExceptionInterfaces as $externalRootExceptionInterface) {
-            $this->checkExceptionInterface($exceptionInterface, $externalRootExceptionInterface);
+        if ($externalRootExceptionInterfaces) {
+            foreach ($externalRootExceptionInterfaces as $externalRootExceptionInterface) {
+                $this->checkExceptionInterface($exceptionInterface, $externalRootExceptionInterface);
+            }
+        } else {
+            $this->checkExceptionInterface($exceptionInterface, false);
         }
 
         $runtimeInterface = $this->assembleRuntimeInterfaceClass($testedNamespace, $exceptionsSubDir);
-        $this->checkRuntimeInterface($runtimeInterface, $exceptionInterface, false);
         $externalRootRuntimeInterfaces = $this->getExternalRootRuntimeInterfaceClasses();
-        foreach ($externalRootRuntimeInterfaces as $externalRootRuntimeInterface) {
-            $this->checkRuntimeInterface($runtimeInterface, $exceptionInterface, $externalRootRuntimeInterface);
+        if ($externalRootRuntimeInterfaces) {
+            foreach ($externalRootRuntimeInterfaces as $externalRootRuntimeInterface) {
+                $this->checkRuntimeInterface($runtimeInterface, $exceptionInterface, $externalRootRuntimeInterface);
+            }
+        } else {
+            $this->checkRuntimeInterface($runtimeInterface, $exceptionInterface, false);
         }
 
         $logicInterface = $this->assembleLogicInterfaceClass($testedNamespace, $exceptionsSubDir);
-        $this->checkLogicInterface($logicInterface, $exceptionInterface, false);
         $externalRootLogicInterfaces = $this->getExternalRootLogicInterfaceClasses();
-        foreach ($externalRootLogicInterfaces as $externalRootLogicInterface) {
-            $this->checkLogicInterface($logicInterface, $exceptionInterface, $externalRootLogicInterface);
+        if ($externalRootLogicInterfaces) {
+            foreach ($externalRootLogicInterfaces as $externalRootLogicInterface) {
+                $this->checkLogicInterface($logicInterface, $exceptionInterface, $externalRootLogicInterface);
+            }
+        } else {
+            $this->checkLogicInterface($logicInterface, $exceptionInterface, false);
         }
 
         $this->checkInterfaceCollision($runtimeInterface, $logicInterface);
