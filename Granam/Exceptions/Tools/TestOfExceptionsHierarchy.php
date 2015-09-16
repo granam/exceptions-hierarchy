@@ -32,6 +32,7 @@ class TestOfExceptionsHierarchy
     {
         $testedNamespace = $this->normalizeNamespace($testedNamespace);
         $rootNamespace = $this->normalizeNamespace($rootNamespace);
+        $externalRootNamespaces = $this->normalizeNamespaces($externalRootNamespaces);
         $this->checkRootNamespace($rootNamespace, $testedNamespace);
         $this->checkExternalRootNamespaces($externalRootNamespaces, $externalRootExceptionsSubDir, $rootNamespace);
 
@@ -58,6 +59,15 @@ class TestOfExceptionsHierarchy
         return '\\' . trim($namespace, '\\');
     }
 
+    protected function normalizeNamespaces(array $namespaces)
+    {
+        foreach ($namespaces as $index => $namespace) {
+            $namespaces[$index] = $this->normalizeNamespace($namespace);
+        }
+
+        return $namespaces;
+    }
+
     protected function checkRootNamespace($rootNamespace, $testedNamespace)
     {
         if (!preg_match('~^' . preg_quote($rootNamespace) . '~', $testedNamespace)) {
@@ -73,8 +83,13 @@ class TestOfExceptionsHierarchy
             return;
         }
         foreach ($externalRootNamespaces as $externalRootNamespace) {
-            if (strpos($rootNamespace, $externalRootNamespace)) {
-                throw new Exceptions\RootNamespaceHasToBeSuperior(
+            if ($rootNamespace === $externalRootNamespace) {
+                throw new Exceptions\ExternalRootNamespaceHasToBeSuperior(
+                    "External root namespace $externalRootNamespace should differ to local root namespace $rootNamespace"
+                );
+            }
+            if (strpos($externalRootNamespace, $rootNamespace) === 0) {
+                throw new Exceptions\ExternalRootNamespaceHasToBeSuperior(
                     "External root namespace $externalRootNamespace should not be subordinate to local root namespace $rootNamespace"
                 );
             }
