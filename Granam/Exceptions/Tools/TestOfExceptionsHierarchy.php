@@ -378,6 +378,16 @@ class TestOfExceptionsHierarchy
     protected function My_exceptions_are_properly_tagged($exceptionClass)
     {
         $namespace = $this->parseNamespaceFromClass($exceptionClass);
+        $this->checkIfIsBaseTagged($exceptionClass, $namespace);
+        $this->checkTagCollision($exceptionClass, $namespace);
+
+        if (class_exists($exceptionClass)) {
+            $this->My_exception_is_child_of_proper_base_exception($exceptionClass);
+        }
+    }
+
+    private function checkIfIsBaseTagged($exceptionClass, $namespace)
+    {
         $isBaseTagged = is_a($exceptionClass, $this->assembleExceptionInterfaceClass($namespace), true);
         if (!$isBaseTagged) {
             throw new Exceptions\ExceptionIsNotTaggedProperly(
@@ -385,8 +395,12 @@ class TestOfExceptionsHierarchy
                 . " $exceptionClass has to be tagged by Exception interface"
             );
         }
-        $isRuntime = is_a($exceptionClass, $this->assembleRuntimeInterfaceClass($namespace), true);
-        $isLogic = is_a($exceptionClass, $this->assembleLogicInterfaceClass($namespace), true);
+    }
+
+    private function checkTagCollision($exceptionClass, $namespace)
+    {
+        $isRuntime = $this->isRuntime($exceptionClass, $namespace);
+        $isLogic = $this->isLogic($exceptionClass, $namespace);
         if ($isRuntime && $isLogic) {
             throw new Exceptions\ExceptionIsNotTaggedProperly(
                 "Exception " . (class_exists($exceptionClass) ? 'class' : 'interface')
@@ -399,22 +413,29 @@ class TestOfExceptionsHierarchy
                 . " $exceptionClass is not tagged by Runtime interface or even Logic interface"
             );
         }
-        if (class_exists($exceptionClass)) {
-            $this->My_exception_is_child_of_proper_base_exception($exceptionClass, $isRuntime);
-        }
+    }
+
+    private function isRuntime($exceptionClass, $namespace)
+    {
+        return is_a($exceptionClass, $this->assembleRuntimeInterfaceClass($namespace), true);
+    }
+
+    private function isLogic($exceptionClass, $namespace)
+    {
+        return is_a($exceptionClass, $this->assembleLogicInterfaceClass($namespace), true);
     }
 
     /**
      * @param string $exceptionClass
-     * @param bool $isRuntime
      */
-    protected function My_exception_is_child_of_proper_base_exception($exceptionClass, $isRuntime)
+    protected function My_exception_is_child_of_proper_base_exception($exceptionClass)
     {
         if (!is_a($exceptionClass, '\Exception', true)) {
             throw new Exceptions\InvalidExceptionHierarchy("$exceptionClass should be child of \\Exception");
         }
 
-        if ($isRuntime) {
+        $namespace = $this->parseNamespaceFromClass($exceptionClass);
+        if ($this->isRuntime($exceptionClass, $namespace)) {
             if (!is_a($exceptionClass, '\RuntimeException', true)) {
                 throw new Exceptions\InvalidExceptionHierarchy("$exceptionClass should be child of \\RuntimeException");
             }
