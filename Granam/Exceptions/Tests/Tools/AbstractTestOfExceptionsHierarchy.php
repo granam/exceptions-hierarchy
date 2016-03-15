@@ -57,7 +57,7 @@ abstract class AbstractTestOfExceptionsHierarchy extends \PHPUnit_Framework_Test
      */
     public function My_exceptions_are_in_family_tree()
     {
-        $this->getTestOfExceptionsHierarchy()->My_exceptions_are_in_family_tree();
+        self::assertTrue($this->getTestOfExceptionsHierarchy()->My_exceptions_are_in_family_tree());
     }
 
 }
