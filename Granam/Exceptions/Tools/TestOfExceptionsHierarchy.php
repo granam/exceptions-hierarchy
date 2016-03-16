@@ -503,7 +503,7 @@ class TestOfExceptionsHierarchy
         if ($closestParent) {
             if (!is_a($customExceptionClass, $closestParent, true)) {
                 throw new InvalidExceptionHierarchy(
-                    "Exception {$customExceptionClass} should extend parent {$closestParent}"
+                    "Exception {$customExceptionClass} should extends parent {$closestParent}"
                 );
             }
         }
@@ -514,20 +514,20 @@ class TestOfExceptionsHierarchy
         $baseName = $this->extractClassBaseName($className);
         $namespace = $this->extractNamespaceFromClass($className);
 
-        while ($namespace = $this->extractParentNamespace($namespace)) {
-            $parentClass = $this->assembleClassName($namespace, $this->getExceptionsSubDir(), $baseName);
-            if (class_exists($parentClass)) {
-                return $parentClass;
+        while (($namespace = $this->extractParentNamespace($namespace)) !== false) {
+            $soughtParentClass = $this->assembleClassName($namespace, $this->getExceptionsSubDir(), $baseName);
+            if (class_exists($soughtParentClass)) {
+                return $soughtParentClass;
             }
         }
 
         foreach ($this->getExternalRootNamespaces() as $externalRootNamespace) {
             do {
-                $parentClass = $externalRootNamespace . '\\' . $baseName;
-                if (class_exists($parentClass)) {
-                    return $parentClass;
+                $soughtParentClass = $externalRootNamespace . '\\' . $baseName;
+                if (class_exists($soughtParentClass)) {
+                    return $soughtParentClass;
                 }
-            } while ($externalRootNamespace = $this->extractParentNamespace($externalRootNamespace));
+            } while (($externalRootNamespace = $this->extractParentNamespace($externalRootNamespace)) !== false);
         }
 
         return false;
