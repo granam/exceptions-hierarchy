@@ -1,6 +1,8 @@
 <?php
 namespace Granam\Exceptions\Tools;
 
+use Granam\Exceptions\Tools\Exceptions\InvalidExceptionHierarchy;
+
 class TestOfExceptionsHierarchy
 {
     /** @var string */
@@ -338,12 +340,13 @@ class TestOfExceptionsHierarchy
         do {
             $this->My_tag_interfaces_are_in_hierarchy($testedNamespace, $this->getExceptionsSubDir(), $childNamespaces);
             $directory = $this->getNamespaceDirectory($testedNamespace);
-            foreach ($this->getCustomExceptionsFrom($directory) as $customException) {
-                $this->My_exceptions_are_properly_tagged($customException);
+            foreach ($this->getCustomExceptionsFrom($directory) as $customExceptionClass) {
+                $this->My_exception_is_properly_tagged($customExceptionClass);
+                $this->My_custom_exception_follows_parent($customExceptionClass);
             }
             $alreadyInRoot = $testedNamespace === $this->getRootNamespace();
             $childNamespaces[] = $testedNamespace;
-            $testedNamespace = $this->parseParentNamespace($testedNamespace);
+            $testedNamespace = $this->extractParentNamespace($testedNamespace, $this->getExceptionsSubDir());
         } while (!$alreadyInRoot && $testedNamespace);
 
         return true;
@@ -376,9 +379,9 @@ class TestOfExceptionsHierarchy
         return $customExceptions;
     }
 
-    protected function My_exceptions_are_properly_tagged($exceptionClass)
+    protected function My_exception_is_properly_tagged($exceptionClass)
     {
-        $namespace = $this->parseNamespaceFromClass($exceptionClass);
+        $namespace = $this->extractNamespaceFromClass($exceptionClass);
         $this->checkIfIsBaseTagged($exceptionClass, $namespace);
         $this->checkTagCollision($exceptionClass, $namespace);
 
@@ -435,7 +438,7 @@ class TestOfExceptionsHierarchy
             throw new Exceptions\InvalidExceptionHierarchy("$exceptionClass should be child of \\Exception");
         }
 
-        $namespace = $this->parseNamespaceFromClass($exceptionClass);
+        $namespace = $this->extractNamespaceFromClass($exceptionClass);
         if ($this->isRuntime($exceptionClass, $namespace)) {
             if (!is_a($exceptionClass, '\RuntimeException', true)) {
                 throw new Exceptions\InvalidExceptionHierarchy("$exceptionClass should be child of \\RuntimeException");
@@ -447,9 +450,9 @@ class TestOfExceptionsHierarchy
         }
     }
 
-    protected function parseNamespaceFromClass($className)
+    protected function extractNamespaceFromClass($className)
     {
-        return preg_replace('~(\\\|\w+)$~', '', $className);
+        return $this->normalizeNamespace(preg_replace('~\w+$~', '', $className));
     }
 
     protected function assembleExceptionInterfaceClass($namespace, $subDir = false)
@@ -469,12 +472,77 @@ class TestOfExceptionsHierarchy
 
     private function assembleClassName($namespace, $subDir, $className)
     {
-        return $this->normalizeNamespace($namespace) . ($subDir ? ('\\' . $subDir) : '') . '\\' . $className;
+        $namespace = $this->normalizeNamespace($namespace);
+
+        return
+            ($namespace === '\\' ? '' : $namespace)
+            . ($subDir ? ('\\' . $subDir) : '')
+            . '\\' . $className;
     }
 
-    protected function parseParentNamespace($toNamespace)
+    protected function extractParentNamespace($childNamespace, $subDirToStrip = false)
     {
-        return preg_replace('~[\\\]\w+$~', '', $toNamespace);
+        if ($childNamespace === '\\') {
+            return false;
+        }
+        if ($subDirToStrip) {
+            $childNamespace = preg_replace(
+                '~[\\\]' . preg_quote($subDirToStrip) . '[\\\]?$~',
+                '',
+                $childNamespace
+            );
+        }
+        $roughParentNamespace = preg_replace('~[\\\]\w+[\\\]?$~', '', $childNamespace);
+
+        return $this->normalizeNamespace($roughParentNamespace);
+    }
+
+    protected function My_custom_exception_follows_parent($customExceptionClass)
+    {
+        $closestParent = $this->getClosestParentOfSameName($customExceptionClass);
+        if ($closestParent) {
+            if (!is_a($customExceptionClass, $closestParent, true)) {
+                throw new InvalidExceptionHierarchy(
+                    "Exception {$customExceptionClass} should extend parent {$closestParent}"
+                );
+            }
+        }
+    }
+
+    protected function getClosestParentOfSameName($className)
+    {
+        $baseName = $this->extractClassBaseName($className);
+        $namespace = $this->extractNamespaceFromClass($className);
+
+        while ($namespace = $this->extractParentNamespace($namespace)) {
+            $parentClass = $this->assembleClassName($namespace, $this->getExceptionsSubDir(), $baseName);
+            if (class_exists($parentClass)) {
+                return $parentClass;
+            }
+        }
+
+        foreach ($this->getExternalRootNamespaces() as $externalRootNamespace) {
+            do {
+                $parentClass = $externalRootNamespace . '\\' . $baseName;
+                if (class_exists($parentClass)) {
+                    return $parentClass;
+                }
+            } while ($externalRootNamespace = $this->extractParentNamespace($externalRootNamespace));
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $className
+     *
+     * @return string
+     */
+    protected function extractClassBaseName($className)
+    {
+        preg_match('~(?<basename>\w+)$~', $className, $matches);
+
+        return $matches['basename'];
     }
 
 }
