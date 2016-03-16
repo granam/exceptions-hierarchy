@@ -138,7 +138,7 @@ class TestOfExceptionsHierarchy
     /**
      * @return bool|string
      */
-    public function getExternalRootExceptionsSubDir()
+    protected function getExternalRootExceptionsSubDir()
     {
         return $this->externalRootExceptionsSubDir;
     }
