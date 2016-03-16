@@ -3,7 +3,7 @@ namespace Granam\Tests\Exceptions\Tools;
 
 use Granam\Exceptions\Tools\TestOfExceptionsHierarchy;
 
-class InvalidExternalParentRootNamespaceTest extends ExceptionsHierarchyTest
+class InvalidExternalParentRootNamespaceTest extends AbstractExceptionsHierarchyTest
 {
     protected function getTestedNamespace()
     {

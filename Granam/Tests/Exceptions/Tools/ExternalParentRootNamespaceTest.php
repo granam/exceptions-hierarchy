@@ -1,7 +1,7 @@
 <?php
 namespace Granam\Tests\Exceptions\Tools;
 
-class ExternalParentRootNamespaceTest extends ExceptionsHierarchyTest
+class ExternalParentRootNamespaceTest extends AbstractExceptionsHierarchyTest
 {
     protected function getTestedNamespace()
     {

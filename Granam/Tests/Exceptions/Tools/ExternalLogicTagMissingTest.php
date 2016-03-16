@@ -1,7 +1,7 @@
 <?php
 namespace Granam\Tests\Exceptions\Tools;
 
-class ExternalLogicTagMissingTest extends ExceptionsHierarchyTest
+class ExternalLogicTagMissingTest extends AbstractExceptionsHierarchyTest
 {
     protected function getTestedNamespace()
     {

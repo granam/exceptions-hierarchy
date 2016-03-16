@@ -1,7 +1,7 @@
 <?php
 namespace Granam\Tests\Exceptions\Tools;
 
-class TestOfExceptionHierarchyTest extends ExceptionsHierarchyTest
+class TestOfExceptionHierarchyTest extends AbstractExceptionsHierarchyTest
 {
     /**
      * @return string

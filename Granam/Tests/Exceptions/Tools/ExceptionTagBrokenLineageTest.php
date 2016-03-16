@@ -1,7 +1,7 @@
 <?php
 namespace Granam\Tests\Exceptions\Tools;
 
-class ExceptionTagBrokenLineageTest extends ExceptionsHierarchyTest
+class ExceptionTagBrokenLineageTest extends AbstractExceptionsHierarchyTest
 {
 
     /**

@@ -3,7 +3,7 @@ namespace Granam\Tests\Exceptions\Tools;
 
 use Granam\Exceptions\Tools\TestOfExceptionsHierarchy;
 
-class InvalidRootNamespaceTest extends ExceptionsHierarchyTest
+class InvalidRootNamespaceTest extends AbstractExceptionsHierarchyTest
 {
 
     protected function setUp()

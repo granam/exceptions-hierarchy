@@ -3,7 +3,7 @@ namespace Granam\Tests\Exceptions\Tools;
 
 use Granam\Exceptions\Tools\TestOfExceptionsHierarchy;
 
-abstract class ExceptionsHierarchyTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractExceptionsHierarchyTest extends \PHPUnit_Framework_TestCase
 {
 
     /**

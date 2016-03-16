@@ -1,7 +1,7 @@
 <?php
 namespace Granam\Tests\Exceptions\Tools;
 
-class GreedyRuntimeTagTest extends ExceptionsHierarchyTest
+class GreedyRuntimeTagTest extends AbstractExceptionsHierarchyTest
 {
 
     /**

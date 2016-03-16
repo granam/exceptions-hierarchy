@@ -1,7 +1,7 @@
 <?php
 namespace Granam\Tests\Exceptions\Tools;
 
-class OrphanTagTest extends ExceptionsHierarchyTest
+class OrphanTagTest extends AbstractExceptionsHierarchyTest
 {
 
     /**
