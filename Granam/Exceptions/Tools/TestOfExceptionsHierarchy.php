@@ -385,7 +385,7 @@ class TestOfExceptionsHierarchy
         if (!class_exists($exceptionClass) && !interface_exists($exceptionClass)) {
             throw new Exceptions\ExceptionClassNotFoundByAutoloader(
                 "Exception class nor interface {$exceptionClass} has not been found by auto-loader."
-                . 'Do you follow auto-loader expectations like PSR naming standards?'
+                . ' Do you follow auto-loader expectations like PSR naming standards?'
             );
         }
     }
