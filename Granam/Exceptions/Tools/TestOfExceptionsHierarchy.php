@@ -341,6 +341,7 @@ class TestOfExceptionsHierarchy
             $this->My_tag_interfaces_are_in_hierarchy($testedNamespace, $this->getExceptionsSubDir(), $childNamespaces);
             $directory = $this->getNamespaceDirectory($testedNamespace);
             foreach ($this->getCustomExceptionsFrom($directory) as $customExceptionClass) {
+                $this->My_exception_exists($customExceptionClass);
                 $this->My_exception_is_properly_tagged($customExceptionClass);
                 $this->My_custom_exception_follows_parent($customExceptionClass);
             }
@@ -377,6 +378,16 @@ class TestOfExceptionsHierarchy
         }
 
         return $customExceptions;
+    }
+
+    protected function My_exception_exists($exceptionClass)
+    {
+        if (!class_exists($exceptionClass) && !interface_exists($exceptionClass)) {
+            throw new Exceptions\ExceptionClassNotFoundByAutoloader(
+                "Exception class nor interface {$exceptionClass} has not been found by auto-loader."
+                . 'Do you follow auto-loader expectations like PSR naming standards?'
+            );
+        }
     }
 
     protected function My_exception_is_properly_tagged($exceptionClass)
