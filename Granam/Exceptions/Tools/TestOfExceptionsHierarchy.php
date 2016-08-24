@@ -22,7 +22,6 @@ class TestOfExceptionsHierarchy
      * @param array|string[] $externalRootNamespaces
      * @param string|bool $externalRootExceptionsSubDir
      * @param array|string[] $exceptionClassesSkippedFromUsageTest
-     * @param string $projectRootDir
      * @throws \Granam\Exceptions\Tools\Exceptions\MissingNamespace
      * @throws \Granam\Exceptions\Tools\Exceptions\RootNamespaceHasToBeSuperior
      * @throws \Granam\Exceptions\Tools\Exceptions\ExternalRootNamespaceHasToBeSuperior
@@ -36,8 +35,7 @@ class TestOfExceptionsHierarchy
         $exceptionsSubDir = 'Exceptions',
         array $externalRootNamespaces = array(),
         $externalRootExceptionsSubDir = 'Exceptions',
-        $exceptionClassesSkippedFromUsageTest = array(),
-        $projectRootDir = ''
+        $exceptionClassesSkippedFromUsageTest = array()
     )
     {
         $testedNamespace = $this->normalizeNamespace($testedNamespace);
