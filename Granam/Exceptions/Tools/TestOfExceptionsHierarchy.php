@@ -736,17 +736,23 @@ class TestOfExceptionsHierarchy
     }
 
     /**
-     * @param string $projectRootDir
+     * @param string $exceptionsUsageRootDir
      * @param array|string[] exceptionClassesSkippedFromUsageTest
      * @return bool
      * @throws \Granam\Exceptions\Tools\Exceptions\UnusedException
      */
-    public function My_exceptions_are_used($projectRootDir, array $exceptionClassesSkippedFromUsageTest)
+    public function My_exceptions_are_used($exceptionsUsageRootDir, array $exceptionClassesSkippedFromUsageTest)
     {
-        $projectRootDir = ($projectRootDir !== ''
-            ? $this->normalizeDir($projectRootDir)
-            : $this->getNamespaceDirectory($this->getTestedNamespace()) . DIRECTORY_SEPARATOR . $this->getExceptionsSubDir()
-        );
+        if ($exceptionsUsageRootDir !== '') {
+            $exceptionsUsageRootDir = $this->normalizeDir($exceptionsUsageRootDir);
+        } else {
+            $exceptionsUsageRootDir = $this->getNamespaceDirectory($this->getTestedNamespace());
+            if ($this->getExceptionsSubDir()) {
+                $exceptionsUsageRootDir = $this->normalizeDir(
+                    preg_replace('~' . preg_quote($this->getExceptionsSubDir()) . '$~', '', $exceptionsUsageRootDir)
+                );
+            }
+        }
         $exceptionClassesSkippedFromUsageTest = array_map(
             function ($skippedExceptionClass) {
                 return ltrim($skippedExceptionClass, '\\');
@@ -759,7 +765,7 @@ class TestOfExceptionsHierarchy
             $directory = $this->getNamespaceDirectory($testedNamespace);
             foreach ($this->getCustomExceptionsFrom($directory) as $customExceptionClass) {
                 if (!in_array($customExceptionClass, $exceptionClassesSkippedFromUsageTest, true)) {
-                    $result = $this->My_exception_is_used($customExceptionClass, $projectRootDir);
+                    $result = $this->My_exception_is_used($customExceptionClass, $exceptionsUsageRootDir);
                 }
             }
             $alreadyInRoot = $testedNamespace === $this->getRootNamespace();
@@ -771,11 +777,12 @@ class TestOfExceptionsHierarchy
 
     /**
      * @param string $exceptionClass
-     * @param string $projectRootDir
+     * @param string $exceptionsUsageRootDir
      * @return bool
      * @throws \Granam\Exceptions\Tools\Exceptions\UnusedException
+     * @throws \Granam\Exceptions\Tools\Exceptions\FolderCanNotBeRead
      */
-    protected function My_exception_is_used($exceptionClass, $projectRootDir)
+    protected function My_exception_is_used($exceptionClass, $exceptionsUsageRootDir)
     {
         $exceptionClassBasename = preg_quote($this->extractClassBaseName($exceptionClass));
         $searchForUsage = function ($dirToSearch) use (&$searchForUsage, $exceptionClassBasename) {
@@ -799,8 +806,12 @@ class TestOfExceptionsHierarchy
 
             return false;
         };
-        if ($searchForUsage($projectRootDir)) {
-            return true;
+        try {
+            if ($searchForUsage($exceptionsUsageRootDir)) {
+                return true;
+            }
+        } catch (\UnexpectedValueException $unexpectedValueException) {
+            throw new Exceptions\FolderCanNotBeRead($unexpectedValueException->getMessage());
         }
 
         throw new Exceptions\UnusedException("Exception {$exceptionClass} seems to be unused.");
