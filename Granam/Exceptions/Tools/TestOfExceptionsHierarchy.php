@@ -744,7 +744,7 @@ class TestOfExceptionsHierarchy
         if ($exceptionsUsageRootDir !== '') {
             $exceptionsUsageRootDir = $this->normalizeDir($exceptionsUsageRootDir);
         } else {
-            $exceptionsUsageRootDir = $this->getNamespaceDirectory($this->getTestedNamespace());
+            $exceptionsUsageRootDir = $this->getNamespaceDirectory($this->getRootNamespace());
             if ($this->getExceptionsSubDir()) {
                 $exceptionsUsageRootDir = $this->normalizeDir(
                     preg_replace('~' . preg_quote($this->getExceptionsSubDir()) . '$~', '', $exceptionsUsageRootDir)
