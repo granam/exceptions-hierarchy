@@ -37,4 +37,15 @@ class WithSameNamedNonParentExceptionHierarchyTest extends AbstractExceptionsHie
         // overloading parent method annotations
         parent::My_exceptions_are_in_family_tree();
     }
+
+    protected function getExceptionClassesSkippedFromUsageTest()
+    {
+        return array(
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\WithSameNamedNonParent\Children\IAmSameNamedButNotFromFamily',
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\WithSameNamedNonParent\IAmSameNamedButNotFromFamily',
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\IAmLogicException',
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\IAmRuntimeException',
+        );
+    }
+
 }

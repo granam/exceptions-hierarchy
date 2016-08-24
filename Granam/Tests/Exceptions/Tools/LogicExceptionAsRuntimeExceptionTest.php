@@ -28,4 +28,11 @@ class LogicExceptionAsRuntimeExceptionTest extends AbstractExceptionsHierarchyTe
         return $this->getTestedNamespace();
     }
 
+    protected function getExceptionClassesSkippedFromUsageTest()
+    {
+        return array(
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\LogicExceptionAsRuntimeException\IThoughIAmRuntimeException',
+        );
+    }
+
 }

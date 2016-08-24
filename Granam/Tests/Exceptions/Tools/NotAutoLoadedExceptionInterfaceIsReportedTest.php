@@ -27,4 +27,12 @@ class NotAutoLoadedExceptionInterfaceIsReportedTest extends AbstractExceptionsHi
     {
         return $this->getTestedNamespace();
     }
+
+    protected function getExceptionClassesSkippedFromUsageTest()
+    {
+        return array(
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\CanNotBeLoadedByAutoLoader\WithWronglyNamedInterface\AutoLoaderCanNotFindMeBecauseSomeoneNamedMeWrongly'
+        );
+    }
+
 }

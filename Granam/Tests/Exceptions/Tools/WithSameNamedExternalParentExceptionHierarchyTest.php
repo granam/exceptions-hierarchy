@@ -41,4 +41,12 @@ class WithSameNamedExternalParentExceptionHierarchyTest extends AbstractExceptio
     {
         return false; // exceptions are directly in the external root namespace
     }
+
+    protected function getExceptionClassesSkippedFromUsageTest()
+    {
+        return array(
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\WithSameNamedExternalParent\IAmSameNamed',
+        );
+    }
+
 }

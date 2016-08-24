@@ -17,4 +17,12 @@ class ExceptionsHierarchyTest extends \Granam\Tests\Exceptions\Tools\AbstractExc
     {
         return ''; // no sub-dir for exceptions (its already part of the root namespace)
     }
+
+    protected function getExceptionClassesSkippedFromUsageTest()
+    {
+        return array(
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\IAmLogicException',
+        );
+    }
+
 }

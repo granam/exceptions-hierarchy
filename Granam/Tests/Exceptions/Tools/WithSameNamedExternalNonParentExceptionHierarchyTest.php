@@ -51,4 +51,12 @@ class WithSameNamedExternalNonParentExceptionHierarchyTest extends AbstractExcep
     {
         parent::My_exceptions_are_in_family_tree();
     }
+
+    protected function getExceptionClassesSkippedFromUsageTest()
+    {
+        return array(
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\WithSameNamedExternalNonParent\IAmSameNamed',
+        );
+    }
+
 }

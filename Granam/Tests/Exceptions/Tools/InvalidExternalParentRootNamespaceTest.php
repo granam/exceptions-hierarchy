@@ -75,4 +75,10 @@ class InvalidExternalParentRootNamespaceTest extends AbstractExceptionsHierarchy
         return false;
     }
 
+    public function My_exceptions_are_used()
+    {
+        // disabling original test
+        return false;
+    }
+
 }

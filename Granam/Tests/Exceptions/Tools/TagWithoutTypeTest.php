@@ -31,4 +31,11 @@ class TagWithoutTypeTest extends AbstractExceptionsHierarchyTest
         return $this->getTestedNamespace();
     }
 
+    protected function getExceptionClassesSkippedFromUsageTest()
+    {
+        return array(
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\TagWithoutType\IAmTagWithoutType'
+        );
+    }
+
 }

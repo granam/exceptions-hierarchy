@@ -18,7 +18,9 @@ abstract class AbstractExceptionsHierarchyTest extends \PHPUnit_Framework_TestCa
             $this->getRootNamespace(),
             $this->getExceptionsSubDir(),
             (array)$this->getExternalRootNamespaces(),
-            $this->getExternalRootExceptionsSubDir()
+            $this->getExternalRootExceptionsSubDir(),
+            $this->getExceptionClassesSkippedFromUsageTest(),
+            $this->getExceptionsUsageRootDir()
         );
     }
 
@@ -30,10 +32,19 @@ abstract class AbstractExceptionsHierarchyTest extends \PHPUnit_Framework_TestCa
         return $this->testOfExceptionsHierarchy;
     }
 
+    /**
+     * @return string
+     */
     abstract protected function getTestedNamespace();
 
+    /**
+     * @return string
+     */
     abstract protected function getRootNamespace();
 
+    /**
+     * @return string
+     */
     protected function getExceptionsSubDir()
     {
         return 'Exceptions';
@@ -60,6 +71,33 @@ abstract class AbstractExceptionsHierarchyTest extends \PHPUnit_Framework_TestCa
     public function My_exceptions_are_in_family_tree()
     {
         self::assertTrue($this->getTestOfExceptionsHierarchy()->My_exceptions_are_in_family_tree());
+    }
+
+    /**
+     * @test
+     */
+    public function My_exceptions_are_used()
+    {
+        self::assertTrue($this->getTestOfExceptionsHierarchy()->My_exceptions_are_used(
+            $this->getExceptionsUsageRootDir(),
+            $this->getExceptionClassesSkippedFromUsageTest()
+        ));
+    }
+
+    /**
+     * @return string
+     */
+    protected function getExceptionsUsageRootDir()
+    {
+        return ''; // empty for same dir as exceptions are or upper level moving against exceptions sub dir
+    }
+
+    /**
+     * @return array|string[]
+     */
+    protected function getExceptionClassesSkippedFromUsageTest()
+    {
+        return array();
     }
 
 }

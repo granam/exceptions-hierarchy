@@ -17,4 +17,13 @@ class InheritedTagsTest extends AbstractExceptionsHierarchyTest
     {
         return __NAMESPACE__ . '\DummyExceptionsHierarchy';
     }
+
+    protected function getExceptionClassesSkippedFromUsageTest()
+    {
+        return array(
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\IAmLogicException',
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\IAmRuntimeException',
+        );
+    }
+
 }

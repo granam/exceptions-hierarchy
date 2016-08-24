@@ -28,4 +28,10 @@ class OrphanTagTest extends AbstractExceptionsHierarchyTest
         return $this->getTestedNamespace();
     }
 
+    public function My_exceptions_are_used()
+    {
+        // disabling original test
+        return false;
+    }
+
 }

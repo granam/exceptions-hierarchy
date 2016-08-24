@@ -1,8 +1,6 @@
 <?php
 namespace Granam\Exceptions\Tools;
 
-use Granam\Exceptions\Tools\Exceptions\InvalidExceptionHierarchy;
-
 class TestOfExceptionsHierarchy
 {
     /** @var string */
@@ -14,7 +12,7 @@ class TestOfExceptionsHierarchy
     /** @var string */
     private $exceptionsSubDir;
 
-    /** @var array|string[] */
+    /** @var array|\string[] */
     private $externalRootNamespaces = array();
 
     /**
@@ -23,6 +21,8 @@ class TestOfExceptionsHierarchy
      * @param string|bool $exceptionsSubDir
      * @param array|string[] $externalRootNamespaces
      * @param string|bool $externalRootExceptionsSubDir
+     * @param array|string[] $exceptionClassesSkippedFromUsageTest
+     * @param string $projectRootDir
      * @throws \Granam\Exceptions\Tools\Exceptions\MissingNamespace
      * @throws \Granam\Exceptions\Tools\Exceptions\RootNamespaceHasToBeSuperior
      * @throws \Granam\Exceptions\Tools\Exceptions\ExternalRootNamespaceHasToBeSuperior
@@ -35,7 +35,9 @@ class TestOfExceptionsHierarchy
         $rootNamespace,
         $exceptionsSubDir = 'Exceptions',
         array $externalRootNamespaces = array(),
-        $externalRootExceptionsSubDir = 'Exceptions'
+        $externalRootExceptionsSubDir = 'Exceptions',
+        $exceptionClassesSkippedFromUsageTest = array(),
+        $projectRootDir = ''
     )
     {
         $testedNamespace = $this->normalizeNamespace($testedNamespace);
@@ -46,7 +48,7 @@ class TestOfExceptionsHierarchy
 
         $this->testedNamespace = $testedNamespace;
         $this->rootNamespace = $rootNamespace;
-        $this->exceptionsSubDir = $exceptionsSubDir;
+        $this->exceptionsSubDir = $this->normalizeSubDir($exceptionsSubDir);
         $this->externalRootNamespaces = $externalRootNamespaces;
         $this->externalRootExceptionsSubDir = $externalRootExceptionsSubDir;
     }
@@ -126,6 +128,26 @@ class TestOfExceptionsHierarchy
                 array() // no child namespaces to check
             );
         }
+    }
+
+    /**
+     * @param string $dir
+     * @return string
+     */
+    protected function normalizeDir($dir)
+    {
+        $normalizedSlash = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $dir);
+
+        return rtrim($normalizedSlash, DIRECTORY_SEPARATOR);
+    }
+
+    /**
+     * @param string $subDir
+     * @return string
+     */
+    protected function normalizeSubDir($subDir)
+    {
+        return ltrim($this->normalizeDir($subDir), DIRECTORY_SEPARATOR);
     }
 
     /**
@@ -411,6 +433,8 @@ class TestOfExceptionsHierarchy
      * @throws \Granam\Exceptions\Tools\Exceptions\ExceptionClassNotFoundByAutoloader
      * @throws \Granam\Exceptions\Tools\Exceptions\ExceptionIsNotTaggedProperly
      * @throws \Granam\Exceptions\Tools\Exceptions\InvalidExceptionHierarchy
+     * @throws \Granam\Exceptions\Tools\Exceptions\TagInterfaceNotFound
+     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidTagInterfaceHierarchy
      */
     public function My_exceptions_are_in_family_tree()
     {
@@ -709,6 +733,77 @@ class TestOfExceptionsHierarchy
         preg_match('~(?<basename>\w+)$~', $className, $matches);
 
         return $matches['basename'];
+    }
+
+    /**
+     * @param string $projectRootDir
+     * @param array|string[] exceptionClassesSkippedFromUsageTest
+     * @return bool
+     * @throws \Granam\Exceptions\Tools\Exceptions\UnusedException
+     */
+    public function My_exceptions_are_used($projectRootDir, array $exceptionClassesSkippedFromUsageTest)
+    {
+        $projectRootDir = ($projectRootDir !== ''
+            ? $this->normalizeDir($projectRootDir)
+            : $this->getNamespaceDirectory($this->getTestedNamespace()) . DIRECTORY_SEPARATOR . $this->getExceptionsSubDir()
+        );
+        $exceptionClassesSkippedFromUsageTest = array_map(
+            function ($skippedExceptionClass) {
+                return ltrim($skippedExceptionClass, '\\');
+            },
+            $exceptionClassesSkippedFromUsageTest
+        );
+        $result = true;
+        $testedNamespace = $this->getTestedNamespace();
+        do {
+            $directory = $this->getNamespaceDirectory($testedNamespace);
+            foreach ($this->getCustomExceptionsFrom($directory) as $customExceptionClass) {
+                if (!in_array($customExceptionClass, $exceptionClassesSkippedFromUsageTest, true)) {
+                    $result = $this->My_exception_is_used($customExceptionClass, $projectRootDir);
+                }
+            }
+            $alreadyInRoot = $testedNamespace === $this->getRootNamespace();
+            $testedNamespace = $this->extractParentNamespace($testedNamespace, $this->getExceptionsSubDir());
+        } while (!$alreadyInRoot && $testedNamespace);
+
+        return $result;
+    }
+
+    /**
+     * @param string $exceptionClass
+     * @param string $projectRootDir
+     * @return bool
+     * @throws \Granam\Exceptions\Tools\Exceptions\UnusedException
+     */
+    protected function My_exception_is_used($exceptionClass, $projectRootDir)
+    {
+        $exceptionClassBasename = preg_quote($this->extractClassBaseName($exceptionClass));
+        $searchForUsage = function ($dirToSearch) use (&$searchForUsage, $exceptionClassBasename) {
+            foreach (new \DirectoryIterator($dirToSearch) as $folder) {
+                if ($folder->isDot()) {
+                    continue;
+                }
+                if ($folder->isFile()) {
+                    if ($folder->isReadable()) {
+                        $content = file_get_contents($folder->getRealPath());
+                        if (preg_match('~(throw\s+new|extends|implements[\s\w\\\,]*)\s+[\w\\\]*' . $exceptionClassBasename . '[^\w\\\]+~i', $content)) {
+                            return true;
+                        }
+                    }
+                } elseif ($folder->isDir()) {
+                    if ($searchForUsage($folder->getPathname())) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        };
+        if ($searchForUsage($projectRootDir)) {
+            return true;
+        }
+
+        throw new Exceptions\UnusedException("Exception {$exceptionClass} seems to be unused.");
     }
 
 }

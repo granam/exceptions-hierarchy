@@ -28,4 +28,12 @@ class GreedyExceptionTest extends AbstractExceptionsHierarchyTest
     {
         return $this->getTestedNamespace();
     }
+
+    protected function getExceptionClassesSkippedFromUsageTest()
+    {
+        return array(
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\GreedyException\BothRuntimeAndLogicTagged',
+        );
+    }
+
 }

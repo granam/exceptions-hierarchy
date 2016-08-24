@@ -27,4 +27,14 @@ class WithSameNamedParentExceptionHierarchyTest extends AbstractExceptionsHierar
         return false; // exceptions are directly in the tested namespace
     }
 
+    protected function getExceptionClassesSkippedFromUsageTest()
+    {
+        return array(
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\WithSameNamedParent\Children\IAmSameNamed',
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\WithSameNamedParent\IAmSameNamed',
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\IAmLogicException',
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\IAmRuntimeException',
+        );
+    }
+
 }

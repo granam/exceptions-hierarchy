@@ -24,11 +24,6 @@ class InvalidRootNamespaceTest extends AbstractExceptionsHierarchyTest
         );
     }
 
-    public function My_exceptions_are_in_family_tree()
-    {
-        return; // disabled
-    }
-
     protected function getTestedNamespace()
     {
         return __NAMESPACE__;
@@ -39,4 +34,13 @@ class InvalidRootNamespaceTest extends AbstractExceptionsHierarchyTest
         return 'invalid root namespace';
     }
 
+    public function My_exceptions_are_in_family_tree()
+    {
+        return false; // disabled
+    }
+
+    public function My_exceptions_are_used()
+    {
+        return false; // disabled
+    }
 }

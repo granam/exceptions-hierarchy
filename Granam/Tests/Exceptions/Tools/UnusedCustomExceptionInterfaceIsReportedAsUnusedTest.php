@@ -1,14 +1,14 @@
 <?php
 namespace Granam\Tests\Exceptions\Tools;
 
-class DummyExceptionHierarchyTest extends AbstractExceptionsHierarchyTest
+class UnusedCustomExceptionInterfaceIsReportedAsUnusedTest extends AbstractExceptionsHierarchyTest
 {
     /**
      * @return string
      */
     protected function getTestedNamespace()
     {
-        return __NAMESPACE__ . '\\DummyExceptionsHierarchy';
+        return __NAMESPACE__ . '\\DummyExceptionsHierarchy\\UnusedCustomExceptionInterface';
     }
 
     /**
@@ -28,13 +28,14 @@ class DummyExceptionHierarchyTest extends AbstractExceptionsHierarchyTest
     }
 
     /**
-     * @return array|string[]
+     * @test
+     * @expectedException \Granam\Exceptions\Tools\Exceptions\UnusedException
+     * @expectedExceptionMessageRegExp ~PleaseUseMeIFeelAlone~
      */
-    protected function getExceptionClassesSkippedFromUsageTest()
+    public function My_exceptions_are_used()
     {
-        return array(
-            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\IAmLogicException',
-            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\IAmRuntimeException',
-        );
+        // overloaded parent annotation
+        parent::My_exceptions_are_used();
     }
+
 }
