@@ -8,7 +8,7 @@ class InvalidExceptionsUsageRootDirCauseExceptionTest extends AbstractExceptions
      */
     protected function getTestedNamespace()
     {
-        return __NAMESPACE__ . '\\DummyExceptionsHierarchy\\PerfectFamily';
+        return __NAMESPACE__ . '\\DummyExceptionsHierarchy\\UnusedCustomException';
     }
 
     /**
