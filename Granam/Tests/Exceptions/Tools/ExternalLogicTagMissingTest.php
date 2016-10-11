@@ -21,7 +21,7 @@ class ExternalLogicTagMissingTest extends AbstractExceptionsHierarchyTest
     protected function getExternalRootNamespaces()
     {
         // skipping some namespace chain up from root namespace
-        return array('\Granam');
+        return array('\Granam\Exceptions\Tools');
     }
 
     protected function getExternalRootExceptionsSubDir()

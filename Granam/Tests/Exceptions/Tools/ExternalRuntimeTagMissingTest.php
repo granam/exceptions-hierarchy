@@ -21,12 +21,12 @@ class ExternalRuntimeTagMissingTest extends AbstractExceptionsHierarchyTest
     protected function getExternalRootNamespaces()
     {
         // skipping some namespace chain up from root namespace
-        return array('\Granam\Exceptions');
+        return array('\Granam\Exceptions\Tools');
     }
 
     protected function getExternalRootExceptionsSubDir()
     {
-        return false;
+        return 'Exceptions';
     }
 
     /**

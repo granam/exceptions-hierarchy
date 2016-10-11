@@ -812,7 +812,7 @@ class TestOfExceptionsHierarchy
             throw new Exceptions\FolderCanNotBeRead($unexpectedValueException->getMessage());
         }
 
-        throw new Exceptions\UnusedException("Exception {$exceptionClass} seems to be unused.");
+        throw new Exceptions\UnusedException("Exception {$exceptionClass} is unused.");
     }
 
 }

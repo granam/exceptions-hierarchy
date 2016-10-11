@@ -57,7 +57,7 @@ abstract class AbstractExceptionsHierarchyTest extends \PHPUnit_Framework_TestCa
      */
     protected function getExternalRootNamespaces()
     {
-        return array();
+        return [];
     }
 
     protected function getExternalRootExceptionsSubDir()
@@ -75,13 +75,16 @@ abstract class AbstractExceptionsHierarchyTest extends \PHPUnit_Framework_TestCa
 
     /**
      * @test
+     * @depends My_exceptions_are_in_family_tree
      */
     public function My_exceptions_are_used()
     {
-        self::assertTrue($this->getTestOfExceptionsHierarchy()->My_exceptions_are_used(
-            $this->getExceptionsUsageRootDir(),
-            $this->getExceptionClassesSkippedFromUsageTest()
-        ));
+        self::assertTrue(
+            $this->getTestOfExceptionsHierarchy()->My_exceptions_are_used(
+                $this->getExceptionsUsageRootDir(),
+                $this->getExceptionClassesSkippedFromUsageTest()
+            )
+        );
     }
 
     /**
@@ -97,7 +100,7 @@ abstract class AbstractExceptionsHierarchyTest extends \PHPUnit_Framework_TestCa
      */
     protected function getExceptionClassesSkippedFromUsageTest()
     {
-        return array();
+        return [];
     }
 
 }

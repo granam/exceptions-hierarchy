@@ -1,28 +1,24 @@
 <?php
 namespace Granam\Tests\Exceptions;
 
-class ExceptionsHierarchyTest extends \Granam\Tests\Exceptions\Tools\AbstractExceptionsHierarchyTest
+use Granam\Tests\Exceptions\Tools\AbstractExceptionsHierarchyTest;
+
+class ExceptionsHierarchyTest extends AbstractExceptionsHierarchyTest
 {
+    /**
+     * @return string
+     */
     protected function getTestedNamespace()
     {
         return $this->getRootNamespace();
     }
 
+    /**
+     * @return string
+     */
     protected function getRootNamespace()
     {
-        return str_replace('\Tests\\', '\\', __NAMESPACE__);
-    }
-
-    protected function getExceptionsSubDir()
-    {
-        return ''; // no sub-dir for exceptions (its already part of the root namespace)
-    }
-
-    protected function getExceptionClassesSkippedFromUsageTest()
-    {
-        return array(
-            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\IAmLogicException',
-        );
+        return 'Granam\Exceptions\Tools';
     }
 
 }
