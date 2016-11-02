@@ -57,7 +57,7 @@ abstract class AbstractExceptionsHierarchyTest extends \PHPUnit_Framework_TestCa
      */
     protected function getExternalRootNamespaces()
     {
-        return [];
+        return array();
     }
 
     protected function getExternalRootExceptionsSubDir()
@@ -100,7 +100,7 @@ abstract class AbstractExceptionsHierarchyTest extends \PHPUnit_Framework_TestCa
      */
     protected function getExceptionClassesSkippedFromUsageTest()
     {
-        return [];
+        return array();
     }
 
 }
