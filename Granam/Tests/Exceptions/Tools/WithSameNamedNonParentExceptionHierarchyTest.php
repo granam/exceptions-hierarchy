@@ -29,7 +29,7 @@ class WithSameNamedNonParentExceptionHierarchyTest extends AbstractExceptionsHie
 
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\InvalidExceptionHierarchy
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\InvalidExceptionHierarchy
      * @expectedExceptionMessageRegExp ~^Exception .+\\WithSameNamedNonParent\\Children\\IAmSameNamedButNotFromFamily should extends parent .+\\WithSameNamedNonParent\\IAmSameNamedButNotFromFamily~
      */
     public function My_exceptions_are_in_family_tree()
@@ -40,12 +40,12 @@ class WithSameNamedNonParentExceptionHierarchyTest extends AbstractExceptionsHie
 
     protected function getExceptionClassesSkippedFromUsageTest()
     {
-        return array(
-            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\WithSameNamedNonParent\Children\IAmSameNamedButNotFromFamily',
-            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\WithSameNamedNonParent\IAmSameNamedButNotFromFamily',
-            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\IAmLogicException',
-            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\IAmRuntimeException',
-        );
+        return [
+            DummyExceptionsHierarchy\WithSameNamedNonParent\Children\IAmSameNamedButNotFromFamily::class,
+            DummyExceptionsHierarchy\WithSameNamedNonParent\IAmSameNamedButNotFromFamily::class,
+            DummyExceptionsHierarchy\IAmLogicException::class,
+            DummyExceptionsHierarchy\IAmRuntimeException::class,
+        ];
     }
 
 }

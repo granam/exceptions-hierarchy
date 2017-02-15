@@ -1,5 +1,5 @@
 {
-  "name": "granam/exception-hierarchy",
+  "name": "granam/exceptions-hierarchy",
   "type": "library",
   "description": "The hierarchy skeleton of exceptions in a project",
   "keywords": [
@@ -10,7 +10,7 @@
     "hierarchy"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/jaroslavtyc/granam-exception-hierarchy",
+  "homepage": "https://github.com/jaroslavtyc/granam-exceptions-hierarchy",
   "autoload": {
     "psr-4": {
       "Granam\\": "Granam/"

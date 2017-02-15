@@ -29,9 +29,9 @@ class WithSameNamedExternalNonParentExceptionHierarchyTest extends AbstractExcep
 
     protected function getExternalRootNamespaces()
     {
-        return array(
+        return [
             __NAMESPACE__ . '\\DummyExceptionsHierarchy\\WithSameNamedParent',
-        );
+        ];
     }
 
     /**
@@ -40,11 +40,11 @@ class WithSameNamedExternalNonParentExceptionHierarchyTest extends AbstractExcep
     protected function getExternalRootExceptionsSubDir()
     {
         return false; // exceptions are directly in the external root namespace
-    }
+    }/** @noinspection SenselessProxyMethodInspection */
 
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\InvalidExceptionHierarchy
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\InvalidExceptionHierarchy
      * @expectedExceptionMessageRegExp ~Exception .+\\WithSameNamedExternalNonParent\\IAmSameNamed .+ parent .+\\WithSameNamedParent\\IAmSameNamed~
      */
     public function My_exceptions_are_in_family_tree()
@@ -54,9 +54,9 @@ class WithSameNamedExternalNonParentExceptionHierarchyTest extends AbstractExcep
 
     protected function getExceptionClassesSkippedFromUsageTest()
     {
-        return array(
-            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\WithSameNamedExternalNonParent\IAmSameNamed',
-        );
+        return [
+            DummyExceptionsHierarchy\WithSameNamedExternalNonParent\IAmSameNamed::class,
+        ];
     }
 
 }

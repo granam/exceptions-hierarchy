@@ -29,9 +29,9 @@ class WithSameNamedExternalInterfaceNonParentExceptionHierarchyTest extends Abst
 
     protected function getExternalRootNamespaces()
     {
-        return array(
+        return [
             __NAMESPACE__ . '\\DummyExceptionsHierarchy\\WithSameNamedParent',
-        );
+        ];
     }
 
     /**
@@ -40,12 +40,12 @@ class WithSameNamedExternalInterfaceNonParentExceptionHierarchyTest extends Abst
     protected function getExternalRootExceptionsSubDir()
     {
         return false; // exceptions are directly in the external root namespace
-    }
+    }/** @noinspection SenselessProxyMethodInspection */
 
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\InvalidTagInterfaceHierarchy
-     * @expectedExceptionMessageRegExp ~Tag interface .+\\WithSameNamedExternalInterfaceNonParent\\Exception .+ external parent tag interface .+\\WithSameNamedParent\\Exception~
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\InvalidTagInterfaceHierarchy
+     * @expectedExceptionMessageRegExp ~Tag interface .+\\WithSameNamedExternalInterfaceNonParent\\Exception .+external parent tag interface .+\\WithSameNamedParent\\Exception~
      */
     public function My_exceptions_are_in_family_tree()
     {

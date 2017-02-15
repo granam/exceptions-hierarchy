@@ -3,9 +3,10 @@ namespace Granam\Tests\Exceptions\Tools;
 
 class NotAnExceptionTest extends AbstractExceptionsHierarchyTest
 {
+    /** @noinspection SenselessProxyMethodInspection */
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\InvalidExceptionHierarchy
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\InvalidExceptionHierarchy
      * @expectedExceptionMessageRegExp ~.+ should be child of \\Exception$~
      */
     public function My_exceptions_are_in_family_tree()
@@ -30,9 +31,9 @@ class NotAnExceptionTest extends AbstractExceptionsHierarchyTest
 
     protected function getExceptionClassesSkippedFromUsageTest()
     {
-        return array(
-            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\NotAnException\IThoughtIAmException'
-        );
+        return [
+            DummyExceptionsHierarchy\NotAnException\IThoughtIAmException::class,
+        ];
     }
 
 }

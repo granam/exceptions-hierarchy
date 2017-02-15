@@ -40,7 +40,7 @@ class InvalidExceptionsUsageRootDirCauseExceptionTest extends AbstractExceptions
 
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\FolderCanNotBeRead
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\FolderCanNotBeRead
      */
     public function My_exceptions_are_used()
     {

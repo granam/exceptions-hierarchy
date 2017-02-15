@@ -5,7 +5,7 @@ class NotAutoLoadedExceptionClassIsReportedTest extends AbstractExceptionsHierar
 {
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\ExceptionClassNotFoundByAutoloader
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\ExceptionClassNotFoundByAutoloader
      * @expectedExceptionMessageRegExp ~class .+ interface .+AutoLoaderCanNotFindMeBecauseSomeoneNamedMeWrongly~
      */
     public function My_exceptions_are_in_family_tree()
@@ -30,9 +30,9 @@ class NotAutoLoadedExceptionClassIsReportedTest extends AbstractExceptionsHierar
 
     protected function getExceptionClassesSkippedFromUsageTest()
     {
-        return array(
+        return [
             'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\CanNotBeLoadedByAutoLoader\WithWronglyNamedClass\AutoLoaderCanNotFindMeBecauseSomeoneNamedMeWrongly',
-        );
+        ];
     }
 
 }

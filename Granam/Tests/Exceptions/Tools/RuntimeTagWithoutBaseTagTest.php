@@ -6,7 +6,7 @@ class RuntimeTagWithoutBaseTagTest extends AbstractExceptionsHierarchyTest
 
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\InvalidTagInterfaceHierarchy
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\InvalidTagInterfaceHierarchy
      * @expectedExceptionMessageRegExp ~^Runtime tag interface .+ is not a child of .+\\Exception$$~
      */
     public function My_exceptions_are_in_family_tree()

@@ -6,7 +6,7 @@ class OrphanTagTest extends AbstractExceptionsHierarchyTest
 
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\TagInterfaceNotFound
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\TagInterfaceNotFound
      */
     public function My_exceptions_are_in_family_tree()
     {

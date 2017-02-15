@@ -1,7 +1,7 @@
 <?php
 namespace Granam\Tests\Exceptions\Tools;
 
-use Granam\Exceptions\Tools\TestOfExceptionsHierarchy;
+use Granam\ExceptionsHierarchy\TestOfExceptionsHierarchy;
 
 abstract class AbstractExceptionsHierarchyTest extends \PHPUnit_Framework_TestCase
 {
@@ -57,7 +57,7 @@ abstract class AbstractExceptionsHierarchyTest extends \PHPUnit_Framework_TestCa
      */
     protected function getExternalRootNamespaces()
     {
-        return array();
+        return [];
     }
 
     protected function getExternalRootExceptionsSubDir()
@@ -100,7 +100,7 @@ abstract class AbstractExceptionsHierarchyTest extends \PHPUnit_Framework_TestCa
      */
     protected function getExceptionClassesSkippedFromUsageTest()
     {
-        return array();
+        return [];
     }
 
 }

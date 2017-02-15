@@ -3,10 +3,11 @@ namespace Granam\Tests\Exceptions\Tools;
 
 class NotTaggedExceptionTest extends AbstractExceptionsHierarchyTest
 {
+    /** @noinspection SenselessProxyMethodInspection */
 
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\ExceptionIsNotTaggedProperly
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\ExceptionIsNotTaggedProperly
      * @expectedExceptionMessageRegExp ~^Class .+\\NotTaggedExceptionWithout\\IToughIAmTagged has to be tagged by Exception interface$~
      */
     public function My_exceptions_are_in_family_tree()
@@ -31,9 +32,9 @@ class NotTaggedExceptionTest extends AbstractExceptionsHierarchyTest
 
     protected function getExceptionClassesSkippedFromUsageTest()
     {
-        return array(
-            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\NotTaggedExceptionWithout\IToughIAmTagged',
-        );
+        return [
+            DummyExceptionsHierarchy\NotTaggedExceptionWithout\IToughIAmTagged::class,
+        ];
     }
 
 }

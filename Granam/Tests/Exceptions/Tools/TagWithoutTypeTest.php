@@ -8,7 +8,7 @@ class TagWithoutTypeTest extends AbstractExceptionsHierarchyTest
      * I_am_stopped_on_tag_without_type
      *
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\ExceptionIsNotTaggedProperly
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\ExceptionIsNotTaggedProperly
      * @expectedExceptionMessageRegExp ~ is not tagged by Runtime interface or even Logic interface$~
      */
     public function My_exceptions_are_in_family_tree()
@@ -33,9 +33,9 @@ class TagWithoutTypeTest extends AbstractExceptionsHierarchyTest
 
     protected function getExceptionClassesSkippedFromUsageTest()
     {
-        return array(
-            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\TagWithoutType\IAmTagWithoutType'
-        );
+        return [
+            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\TagWithoutType\IAmTagWithoutType',
+        ];
     }
 
 }

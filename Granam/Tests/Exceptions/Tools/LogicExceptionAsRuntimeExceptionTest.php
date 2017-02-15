@@ -1,11 +1,14 @@
 <?php
 namespace Granam\Tests\Exceptions\Tools;
 
+use Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\LogicExceptionAsRuntimeException\IThoughIAmRuntimeException;
+
 class LogicExceptionAsRuntimeExceptionTest extends AbstractExceptionsHierarchyTest
 {
+    /** @noinspection SenselessProxyMethodInspection */
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\InvalidExceptionHierarchy
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\InvalidExceptionHierarchy
      * @expectedExceptionMessageRegExp ~should be child of \\RuntimeException$~
      */
     public function My_exceptions_are_in_family_tree()
@@ -30,9 +33,9 @@ class LogicExceptionAsRuntimeExceptionTest extends AbstractExceptionsHierarchyTe
 
     protected function getExceptionClassesSkippedFromUsageTest()
     {
-        return array(
-            'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\LogicExceptionAsRuntimeException\IThoughIAmRuntimeException',
-        );
+        return [
+            IThoughIAmRuntimeException::class,
+        ];
     }
 
 }

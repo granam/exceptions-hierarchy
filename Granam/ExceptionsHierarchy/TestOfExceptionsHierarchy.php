@@ -1,5 +1,5 @@
 <?php
-namespace Granam\Exceptions\Tools;
+namespace Granam\ExceptionsHierarchy;
 
 class TestOfExceptionsHierarchy
 {
@@ -13,7 +13,7 @@ class TestOfExceptionsHierarchy
     private $exceptionsSubDir;
 
     /** @var array|\string[] */
-    private $externalRootNamespaces = array();
+    private $externalRootNamespaces = [];
 
     /**
      * @param string $testedNamespace
@@ -21,21 +21,19 @@ class TestOfExceptionsHierarchy
      * @param string|bool $exceptionsSubDir
      * @param array|string[] $externalRootNamespaces
      * @param string|bool $externalRootExceptionsSubDir
-     * @param array|string[] $exceptionClassesSkippedFromUsageTest
-     * @throws \Granam\Exceptions\Tools\Exceptions\MissingNamespace
-     * @throws \Granam\Exceptions\Tools\Exceptions\RootNamespaceHasToBeSuperior
-     * @throws \Granam\Exceptions\Tools\Exceptions\ExternalRootNamespaceHasToBeSuperior
-     * @throws \Granam\Exceptions\Tools\Exceptions\TagInterfaceNotFound
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidTagInterfaceHierarchy
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidExceptionHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\RootNamespaceHasToBeSuperior
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\ExternalRootNamespaceHasToBeSuperior
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\TagInterfaceNotFound
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidTagInterfaceHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidExceptionHierarchy
      */
     public function __construct(
         $testedNamespace,
         $rootNamespace,
         $exceptionsSubDir = 'Exceptions',
-        array $externalRootNamespaces = array(),
-        $externalRootExceptionsSubDir = 'Exceptions',
-        $exceptionClassesSkippedFromUsageTest = array()
+        array $externalRootNamespaces = [],
+        $externalRootExceptionsSubDir = 'Exceptions'
     )
     {
         $testedNamespace = $this->normalizeNamespace($testedNamespace);
@@ -54,7 +52,7 @@ class TestOfExceptionsHierarchy
     /**
      * @param string $namespace
      * @return string
-     * @throws \Granam\Exceptions\Tools\Exceptions\MissingNamespace
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     protected function normalizeNamespace($namespace)
     {
@@ -70,7 +68,7 @@ class TestOfExceptionsHierarchy
     /**
      * @param array|string[] $namespaces
      * @return array
-     * @throws \Granam\Exceptions\Tools\Exceptions\MissingNamespace
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     protected function normalizeNamespaces(array $namespaces)
     {
@@ -84,11 +82,11 @@ class TestOfExceptionsHierarchy
     /**
      * @param string $rootNamespace
      * @param string $testedNamespace
-     * @throws \Granam\Exceptions\Tools\Exceptions\RootNamespaceHasToBeSuperior
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\RootNamespaceHasToBeSuperior
      */
     protected function checkRootNamespace($rootNamespace, $testedNamespace)
     {
-        if (!preg_match('~^' . preg_quote($rootNamespace) . '~', $testedNamespace)) {
+        if (!preg_match('~^' . preg_quote($rootNamespace, '~') . '~', $testedNamespace)) {
             throw new Exceptions\RootNamespaceHasToBeSuperior(
                 "Root namespace $rootNamespace should be leading of currently tested namespace $testedNamespace"
             );
@@ -99,10 +97,11 @@ class TestOfExceptionsHierarchy
      * @param array $externalRootNamespaces
      * @param string $externalRootExceptionsSubDir
      * @param string $rootNamespace
-     * @throws \Granam\Exceptions\Tools\Exceptions\ExternalRootNamespaceHasToBeSuperior
-     * @throws \Granam\Exceptions\Tools\Exceptions\TagInterfaceNotFound
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidTagInterfaceHierarchy
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidExceptionHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\ExternalRootNamespaceHasToBeSuperior
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\TagInterfaceNotFound
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidTagInterfaceHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidExceptionHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     protected function checkExternalRootNamespaces(array $externalRootNamespaces, $externalRootExceptionsSubDir, $rootNamespace)
     {
@@ -123,7 +122,7 @@ class TestOfExceptionsHierarchy
             $this->My_tag_interfaces_are_in_hierarchy(
                 $externalRootNamespace,
                 $externalRootExceptionsSubDir,
-                array() // no child namespaces to check
+                [] // no child namespaces to check
             );
         }
     }
@@ -134,7 +133,7 @@ class TestOfExceptionsHierarchy
      */
     protected function normalizeDir($dir)
     {
-        $normalizedSlash = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $dir);
+        $normalizedSlash = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $dir);
 
         return rtrim($normalizedSlash, DIRECTORY_SEPARATOR);
     }
@@ -192,9 +191,10 @@ class TestOfExceptionsHierarchy
      * @param string $testedNamespace
      * @param string $exceptionsSubDir
      * @param array $childNamespaces
-     * @throws \Granam\Exceptions\Tools\Exceptions\TagInterfaceNotFound
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidTagInterfaceHierarchy
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidExceptionHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\TagInterfaceNotFound
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidTagInterfaceHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidExceptionHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     protected function My_tag_interfaces_are_in_hierarchy($testedNamespace, $exceptionsSubDir, array $childNamespaces)
     {
@@ -214,8 +214,9 @@ class TestOfExceptionsHierarchy
 
     /**
      * @param string $exceptionInterface
-     * @throws \Granam\Exceptions\Tools\Exceptions\TagInterfaceNotFound
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidTagInterfaceHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\TagInterfaceNotFound
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidTagInterfaceHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     private function checkExceptionInterfaces($exceptionInterface)
     {
@@ -232,8 +233,9 @@ class TestOfExceptionsHierarchy
     /**
      * @param string $runtimeInterface
      * @param string $exceptionInterface
-     * @throws \Granam\Exceptions\Tools\Exceptions\TagInterfaceNotFound
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidTagInterfaceHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\TagInterfaceNotFound
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidTagInterfaceHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     private function checkRuntimeInterfaces($runtimeInterface, $exceptionInterface)
     {
@@ -254,8 +256,9 @@ class TestOfExceptionsHierarchy
     /**
      * @param string $logicInterface
      * @param string $exceptionInterface
-     * @throws \Granam\Exceptions\Tools\Exceptions\TagInterfaceNotFound
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidTagInterfaceHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\TagInterfaceNotFound
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidTagInterfaceHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     private function checkLogicInterfaces($logicInterface, $exceptionInterface)
     {
@@ -271,10 +274,11 @@ class TestOfExceptionsHierarchy
 
     /**
      * @return array|string[]
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     private function getExternalRootExceptionInterfaceClasses()
     {
-        $classes = array();
+        $classes = [];
         foreach ($this->getExternalRootNamespaces() as $externalRootNamespace) {
             $classes[] = $this->assembleExceptionInterfaceClass($externalRootNamespace, $this->getExternalRootExceptionsSubDir());
         }
@@ -284,10 +288,11 @@ class TestOfExceptionsHierarchy
 
     /**
      * @return array|string[]
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     private function getExternalRootRuntimeInterfaceClasses()
     {
-        $classes = array();
+        $classes = [];
         foreach ($this->getExternalRootNamespaces() as $externalRootNamespace) {
             $classes[] = $this->assembleRuntimeInterfaceClass($externalRootNamespace, $this->getExternalRootExceptionsSubDir());
         }
@@ -297,10 +302,11 @@ class TestOfExceptionsHierarchy
 
     /**
      * @return array|string[]
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     private function getExternalRootLogicInterfaceClasses()
     {
-        $classes = array();
+        $classes = [];
         foreach ($this->getExternalRootNamespaces() as $externalRootNamespace) {
             $classes[] = $this->assembleLogicInterfaceClass($externalRootNamespace, $this->getExternalRootExceptionsSubDir());
         }
@@ -311,8 +317,8 @@ class TestOfExceptionsHierarchy
     /**
      * @param $exceptionInterface
      * @param string|bool $externalRootExceptionInterface
-     * @throws \Granam\Exceptions\Tools\Exceptions\TagInterfaceNotFound
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidTagInterfaceHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\TagInterfaceNotFound
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidTagInterfaceHierarchy
      */
     private function checkExceptionInterface($exceptionInterface, $externalRootExceptionInterface)
     {
@@ -330,8 +336,8 @@ class TestOfExceptionsHierarchy
      * @param string $runtimeInterface
      * @param string $exceptionInterface
      * @param string $externalRootRuntimeInterface
-     * @throws \Granam\Exceptions\Tools\Exceptions\TagInterfaceNotFound
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidTagInterfaceHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\TagInterfaceNotFound
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidTagInterfaceHierarchy
      */
     private function checkRuntimeInterface($runtimeInterface, $exceptionInterface, $externalRootRuntimeInterface)
     {
@@ -354,8 +360,8 @@ class TestOfExceptionsHierarchy
      * @param string $logicInterface
      * @param string $exceptionInterface
      * @param string $externalRootLogicInterface
-     * @throws \Granam\Exceptions\Tools\Exceptions\TagInterfaceNotFound
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidTagInterfaceHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\TagInterfaceNotFound
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidTagInterfaceHierarchy
      */
     private function checkLogicInterface($logicInterface, $exceptionInterface, $externalRootLogicInterface)
     {
@@ -377,7 +383,7 @@ class TestOfExceptionsHierarchy
     /**
      * @param string $runtimeInterface
      * @param string $logicInterface
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidTagInterfaceHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidTagInterfaceHierarchy
      */
     private function checkInterfaceCollision($runtimeInterface, $logicInterface)
     {
@@ -398,7 +404,8 @@ class TestOfExceptionsHierarchy
      * @param string $exceptionInterface
      * @param string $runtimeInterface
      * @param string $logicInterface
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidExceptionHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidExceptionHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     private function checkChildInterfaces(array $childNamespaces, $exceptionInterface, $runtimeInterface, $logicInterface)
     {
@@ -428,15 +435,16 @@ class TestOfExceptionsHierarchy
 
     /**
      * @return bool
-     * @throws \Granam\Exceptions\Tools\Exceptions\ExceptionClassNotFoundByAutoloader
-     * @throws \Granam\Exceptions\Tools\Exceptions\ExceptionIsNotTaggedProperly
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidExceptionHierarchy
-     * @throws \Granam\Exceptions\Tools\Exceptions\TagInterfaceNotFound
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidTagInterfaceHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\ExceptionClassNotFoundByAutoloader
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\ExceptionIsNotTaggedProperly
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidExceptionHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\TagInterfaceNotFound
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidTagInterfaceHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     public function My_exceptions_are_in_family_tree()
     {
-        $childNamespaces = array();
+        $childNamespaces = [];
         $testedNamespace = $this->getTestedNamespace();
         do {
             $this->My_tag_interfaces_are_in_hierarchy($testedNamespace, $this->getExceptionsSubDir(), $childNamespaces);
@@ -457,6 +465,7 @@ class TestOfExceptionsHierarchy
     /**
      * @param string $namespace
      * @return string
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     protected function getNamespaceDirectory($namespace)
     {
@@ -473,13 +482,13 @@ class TestOfExceptionsHierarchy
      */
     protected function getCustomExceptionsFrom($directory)
     {
-        $customExceptions = array();
+        $customExceptions = [];
         foreach (scandir($directory) as $file) {
             $filePath = $directory . DIRECTORY_SEPARATOR . $file;
             if (is_file($filePath)) {
                 $content = file_get_contents($filePath);
                 if (preg_match('~(namespace\s+(?<namespace>(\w+(\\\)?)+)).+(class|interface)\s+(?<className>\w+)~s', $content, $matches)
-                    && !in_array($matches['className'], array('Exception', 'Runtime', 'Logic'), true)
+                    && !in_array($matches['className'], ['Exception', 'Runtime', 'Logic'], true)
                 ) {
                     $customExceptions[] = $matches['namespace'] . '\\' . $matches['className'];
                 }
@@ -491,7 +500,7 @@ class TestOfExceptionsHierarchy
 
     /**
      * @param string $exceptionClass
-     * @throws \Granam\Exceptions\Tools\Exceptions\ExceptionClassNotFoundByAutoloader
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\ExceptionClassNotFoundByAutoloader
      */
     protected function My_exception_exists($exceptionClass)
     {
@@ -505,8 +514,9 @@ class TestOfExceptionsHierarchy
 
     /**
      * @param string $exceptionClass
-     * @throws \Granam\Exceptions\Tools\Exceptions\ExceptionIsNotTaggedProperly
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidExceptionHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\ExceptionIsNotTaggedProperly
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidExceptionHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     protected function My_exception_is_properly_tagged($exceptionClass)
     {
@@ -522,7 +532,8 @@ class TestOfExceptionsHierarchy
     /**
      * @param string $exceptionClass
      * @param string $namespace
-     * @throws \Granam\Exceptions\Tools\Exceptions\ExceptionIsNotTaggedProperly
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\ExceptionIsNotTaggedProperly
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     private function checkIfIsBaseTagged($exceptionClass, $namespace)
     {
@@ -538,7 +549,8 @@ class TestOfExceptionsHierarchy
     /**
      * @param string $exceptionClass
      * @param string $namespace
-     * @throws \Granam\Exceptions\Tools\Exceptions\ExceptionIsNotTaggedProperly
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\ExceptionIsNotTaggedProperly
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     private function checkTagCollision($exceptionClass, $namespace)
     {
@@ -562,6 +574,7 @@ class TestOfExceptionsHierarchy
      * @param string $exceptionClass
      * @param string $namespace
      * @return bool
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     private function isRuntime($exceptionClass, $namespace)
     {
@@ -572,6 +585,7 @@ class TestOfExceptionsHierarchy
      * @param string $exceptionClass
      * @param string $namespace
      * @return bool
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     private function isLogic($exceptionClass, $namespace)
     {
@@ -580,7 +594,8 @@ class TestOfExceptionsHierarchy
 
     /**
      * @param string $exceptionClass
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidExceptionHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidExceptionHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     protected function My_exception_is_child_of_proper_base_exception($exceptionClass)
     {
@@ -603,6 +618,7 @@ class TestOfExceptionsHierarchy
     /**
      * @param string $className
      * @return string
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     protected function extractNamespaceFromClass($className)
     {
@@ -613,6 +629,7 @@ class TestOfExceptionsHierarchy
      * @param string $namespace
      * @param bool $subDir
      * @return string
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     protected function assembleExceptionInterfaceClass($namespace, $subDir = false)
     {
@@ -623,6 +640,7 @@ class TestOfExceptionsHierarchy
      * @param string $namespace
      * @param bool $subDir
      * @return string
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     protected function assembleRuntimeInterfaceClass($namespace, $subDir = false)
     {
@@ -633,6 +651,7 @@ class TestOfExceptionsHierarchy
      * @param string $namespace
      * @param bool $subDir
      * @return string
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     protected function assembleLogicInterfaceClass($namespace, $subDir = false)
     {
@@ -644,6 +663,7 @@ class TestOfExceptionsHierarchy
      * @param string $subDir
      * @param string $className
      * @return string
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     private function assembleClassName($namespace, $subDir, $className)
     {
@@ -662,6 +682,7 @@ class TestOfExceptionsHierarchy
      * @param string $childNamespace
      * @param bool $subDirToStrip
      * @return bool|string
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     protected function extractParentNamespace($childNamespace, $subDirToStrip = false)
     {
@@ -670,7 +691,7 @@ class TestOfExceptionsHierarchy
         }
         if ($subDirToStrip) {
             $childNamespace = preg_replace(
-                '~[\\\]' . preg_quote($subDirToStrip) . '[\\\]?$~',
+                '~[\\\]' . preg_quote($subDirToStrip, '~') . '[\\\]?$~',
                 '',
                 $childNamespace
             );
@@ -682,7 +703,8 @@ class TestOfExceptionsHierarchy
 
     /**
      * @param $customExceptionClass
-     * @throws \Granam\Exceptions\Tools\Exceptions\InvalidExceptionHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\InvalidExceptionHierarchy
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     protected function My_custom_exception_follows_parent($customExceptionClass)
     {
@@ -697,6 +719,7 @@ class TestOfExceptionsHierarchy
     /**
      * @param string $className
      * @return bool|string
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      */
     protected function getClosestParentOfSameName($className)
     {
@@ -737,7 +760,9 @@ class TestOfExceptionsHierarchy
      * @param string $exceptionsUsageRootDir
      * @param array|string[] exceptionClassesSkippedFromUsageTest
      * @return bool
-     * @throws \Granam\Exceptions\Tools\Exceptions\UnusedException
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\UnusedException
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\FolderCanNotBeRead
      */
     public function My_exceptions_are_used($exceptionsUsageRootDir, array $exceptionClassesSkippedFromUsageTest)
     {
@@ -747,7 +772,7 @@ class TestOfExceptionsHierarchy
             $exceptionsUsageRootDir = $this->getNamespaceDirectory($this->getRootNamespace());
             if ($this->getExceptionsSubDir()) {
                 $exceptionsUsageRootDir = $this->normalizeDir(
-                    preg_replace('~' . preg_quote($this->getExceptionsSubDir()) . '$~', '', $exceptionsUsageRootDir)
+                    preg_replace('~' . preg_quote($this->getExceptionsSubDir(), '~') . '$~', '', $exceptionsUsageRootDir)
                 );
             }
         }
@@ -777,12 +802,12 @@ class TestOfExceptionsHierarchy
      * @param string $exceptionClass
      * @param string $exceptionsUsageRootDir
      * @return bool
-     * @throws \Granam\Exceptions\Tools\Exceptions\UnusedException
-     * @throws \Granam\Exceptions\Tools\Exceptions\FolderCanNotBeRead
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\UnusedException
+     * @throws \Granam\ExceptionsHierarchy\Exceptions\FolderCanNotBeRead
      */
     protected function My_exception_is_used($exceptionClass, $exceptionsUsageRootDir)
     {
-        $exceptionClassBasename = preg_quote($this->extractClassBaseName($exceptionClass));
+        $exceptionClassBasename = preg_quote($this->extractClassBaseName($exceptionClass), '~');
         $searchForUsage = function ($dirToSearch) use (&$searchForUsage, $exceptionClassBasename) {
             foreach (new \DirectoryIterator($dirToSearch) as $folder) {
                 if ($folder->isDot()) {

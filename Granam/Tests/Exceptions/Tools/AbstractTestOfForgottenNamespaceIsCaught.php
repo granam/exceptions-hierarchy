@@ -1,7 +1,7 @@
 <?php
 namespace Granam\Tests\Exceptions\Tools;
 
-use Granam\Exceptions\Tools\TestOfExceptionsHierarchy;
+use Granam\ExceptionsHierarchy\TestOfExceptionsHierarchy;
 
 abstract class AbstractTestOfForgottenNamespaceIsCaught extends \PHPUnit_Framework_TestCase
 {
@@ -12,7 +12,7 @@ abstract class AbstractTestOfForgottenNamespaceIsCaught extends \PHPUnit_Framewo
 
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\MissingNamespace
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\MissingNamespace
      * @expectedExceptionMessageRegExp ~given NULL$~
      */
     public function I_am_stopped_if_forgot_return_of_tested_namespace()

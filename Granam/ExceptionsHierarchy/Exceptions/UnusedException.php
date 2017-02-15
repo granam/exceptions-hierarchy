@@ -1,5 +1,5 @@
 <?php
-namespace Granam\Exceptions\Tools\Exceptions;
+namespace Granam\ExceptionsHierarchy\Exceptions;
 
 class UnusedException extends \LogicException implements Logic
 {

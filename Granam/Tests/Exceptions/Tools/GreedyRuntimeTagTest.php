@@ -6,7 +6,7 @@ class GreedyRuntimeTagTest extends AbstractExceptionsHierarchyTest
 
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\InvalidTagInterfaceHierarchy
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\InvalidTagInterfaceHierarchy
      * @expectedExceptionMessageRegExp ~Runtime tag interface .+\\Runtime can not be a logic tag~
      */
     public function My_exceptions_are_in_family_tree()

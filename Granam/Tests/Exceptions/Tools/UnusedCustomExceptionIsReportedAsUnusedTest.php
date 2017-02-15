@@ -29,7 +29,7 @@ class UnusedCustomExceptionIsReportedAsUnusedTest extends AbstractExceptionsHier
 
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\UnusedException
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\UnusedException
      * @expectedExceptionMessageRegExp ~DoesAnybodyWantMe~
      */
     public function My_exceptions_are_used()

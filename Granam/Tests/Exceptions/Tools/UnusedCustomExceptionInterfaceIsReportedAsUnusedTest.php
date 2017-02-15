@@ -29,7 +29,7 @@ class UnusedCustomExceptionInterfaceIsReportedAsUnusedTest extends AbstractExcep
 
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\UnusedException
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\UnusedException
      * @expectedExceptionMessageRegExp ~PleaseUseMeIFeelAlone~
      */
     public function My_exceptions_are_used()

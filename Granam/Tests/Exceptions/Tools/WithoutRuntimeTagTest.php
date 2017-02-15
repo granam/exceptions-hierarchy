@@ -8,7 +8,7 @@ class WithoutRuntimeTagTest extends AbstractExceptionsHierarchyTest
      * I_am_stopped_if_runtime_tag_is_missing
      *
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\TagInterfaceNotFound
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\TagInterfaceNotFound
      * @expectedExceptionMessageRegExp ~^Runtime tag interface .+\\Runtime not found$~
      */
     public function My_exceptions_are_in_family_tree()

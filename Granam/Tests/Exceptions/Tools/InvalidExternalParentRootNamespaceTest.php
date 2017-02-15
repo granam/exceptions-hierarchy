@@ -1,7 +1,7 @@
 <?php
 namespace Granam\Tests\Exceptions\Tools;
 
-use Granam\Exceptions\Tools\TestOfExceptionsHierarchy;
+use Granam\ExceptionsHierarchy\TestOfExceptionsHierarchy;
 
 class InvalidExternalParentRootNamespaceTest extends AbstractExceptionsHierarchyTest
 {
@@ -23,7 +23,7 @@ class InvalidExternalParentRootNamespaceTest extends AbstractExceptionsHierarchy
     protected function getExternalRootNamespaces()
     {
         // intentionally wrong external namespace
-        return array($this->getRootNamespace());
+        return [$this->getRootNamespace()];
     }
 
     protected function getExternalRootExceptionsSubDir()
@@ -39,7 +39,7 @@ class InvalidExternalParentRootNamespaceTest extends AbstractExceptionsHierarchy
 
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\ExternalRootNamespaceHasToBeSuperior
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\ExternalRootNamespaceHasToBeSuperior
      * @expectedExceptionMessageRegExp ~^External root namespace .+ should differ to local root namespace~
      */
     public function I_can_not_use_inner_namespace_as_external()
@@ -55,7 +55,7 @@ class InvalidExternalParentRootNamespaceTest extends AbstractExceptionsHierarchy
 
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\ExternalRootNamespaceHasToBeSuperior
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\ExternalRootNamespaceHasToBeSuperior
      * @expectedExceptionMessageRegExp ~^External root namespace .+ should not be subordinate to local root namespace~
      */
     public function I_can_not_use_external_namespace_subordinated_to_internal()
@@ -64,7 +64,7 @@ class InvalidExternalParentRootNamespaceTest extends AbstractExceptionsHierarchy
             $this->getTestedNamespace(),
             $this->getRootNamespace(),
             $this->getExceptionsSubDir(),
-            array($this->getTestedNamespace() . '\\InvalidExternalParent'),
+            [$this->getTestedNamespace() . '\\InvalidExternalParent'],
             ''
         );
     }

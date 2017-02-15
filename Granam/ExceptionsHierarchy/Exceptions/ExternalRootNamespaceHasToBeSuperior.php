@@ -1,5 +1,5 @@
 <?php
-namespace Granam\Exceptions\Tools\Exceptions;
+namespace Granam\ExceptionsHierarchy\Exceptions;
 
 class ExternalRootNamespaceHasToBeSuperior extends RootNamespaceHasToBeSuperior
 {

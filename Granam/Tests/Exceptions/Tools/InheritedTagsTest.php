@@ -20,10 +20,10 @@ class InheritedTagsTest extends AbstractExceptionsHierarchyTest
 
     protected function getExceptionClassesSkippedFromUsageTest()
     {
-        return array(
+        return [
             'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\IAmLogicException',
             'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\IAmRuntimeException',
-        );
+        ];
     }
 
 }

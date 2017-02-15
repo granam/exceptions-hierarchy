@@ -3,10 +3,11 @@ namespace Granam\Tests\Exceptions\Tools;
 
 class RuntimeTagBrokenLineageTest extends AbstractExceptionsHierarchyTest
 {
+    /** @noinspection SenselessProxyMethodInspection */
 
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\InvalidExceptionHierarchy
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\InvalidExceptionHierarchy
      * @expectedExceptionMessageRegExp ~^Tag .+\\BrokenLineage\\RuntimeTagWithoutParent\\Runtime should be child of .+\\BrokenLineage\\Runtime~
      */
     public function My_exceptions_are_in_family_tree()

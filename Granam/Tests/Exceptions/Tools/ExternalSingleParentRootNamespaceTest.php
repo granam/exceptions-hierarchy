@@ -5,7 +5,7 @@ class ExternalSingleParentRootNamespaceTest extends ExternalParentRootNamespaceT
 {
     protected function getExternalRootNamespaces()
     {
-        return '\Granam\Exceptions\Tools'; // string instead of array
+        return '\Granam\ExceptionsHierarchy'; // string instead of array
     }
 
 }

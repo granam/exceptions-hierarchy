@@ -8,7 +8,7 @@ class TestOfExceptionHierarchyTest extends AbstractExceptionsHierarchyTest
      */
     protected function getTestedNamespace()
     {
-        return 'Granam\Exceptions\Tools';
+        return 'Granam\ExceptionsHierarchy';
     }
 
     /**

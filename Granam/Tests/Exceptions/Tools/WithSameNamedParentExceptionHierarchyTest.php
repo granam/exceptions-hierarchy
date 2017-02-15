@@ -29,12 +29,12 @@ class WithSameNamedParentExceptionHierarchyTest extends AbstractExceptionsHierar
 
     protected function getExceptionClassesSkippedFromUsageTest()
     {
-        return array(
+        return [
             'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\WithSameNamedParent\Children\IAmSameNamed',
             'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\WithSameNamedParent\IAmSameNamed',
             'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\IAmLogicException',
             'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\IAmRuntimeException',
-        );
+        ];
     }
 
 }

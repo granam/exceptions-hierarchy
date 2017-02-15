@@ -6,7 +6,7 @@ class GreedyExceptionTest extends AbstractExceptionsHierarchyTest
 
     /**
      * @test
-     * @expectedException \Granam\Exceptions\Tools\Exceptions\ExceptionIsNotTaggedProperly
+     * @expectedException \Granam\ExceptionsHierarchy\Exceptions\ExceptionIsNotTaggedProperly
      * @expectedExceptionMessageRegExp ~ can not be tagged by Runtime interface and Logic interface at the same time$~
      */
     public function My_exceptions_are_in_family_tree()
@@ -31,9 +31,9 @@ class GreedyExceptionTest extends AbstractExceptionsHierarchyTest
 
     protected function getExceptionClassesSkippedFromUsageTest()
     {
-        return array(
+        return [
             'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\GreedyException\BothRuntimeAndLogicTagged',
-        );
+        ];
     }
 
 }

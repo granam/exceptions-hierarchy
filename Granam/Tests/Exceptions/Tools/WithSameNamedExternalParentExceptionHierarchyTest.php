@@ -29,9 +29,9 @@ class WithSameNamedExternalParentExceptionHierarchyTest extends AbstractExceptio
 
     protected function getExternalRootNamespaces()
     {
-        return array(
+        return [
             __NAMESPACE__ . '\DummyExceptionsHierarchy\WithSameNamedParent\Children\IAmHereForWithSameNamedExternalParent',
-        );
+        ];
     }
 
     /**
@@ -44,9 +44,9 @@ class WithSameNamedExternalParentExceptionHierarchyTest extends AbstractExceptio
 
     protected function getExceptionClassesSkippedFromUsageTest()
     {
-        return array(
+        return [
             'Granam\Tests\Exceptions\Tools\DummyExceptionsHierarchy\WithSameNamedExternalParent\IAmSameNamed',
-        );
+        ];
     }
 
 }
