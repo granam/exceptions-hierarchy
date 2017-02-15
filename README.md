@@ -1,5 +1,5 @@
-[![Test Coverage](https://codeclimate.com/github/jaroslavtyc/granam-exception-hierarchy/badges/coverage.svg)](https://codeclimate.com/github/jaroslavtyc/granam-exception-hierarchy/coverage)
-[![License](https://poser.pugx.org/granam/exception-hierarchy/license)](https://packagist.org/packages/granam/exception-hierarchy)
+[![Test Coverage](https://codeclimate.com/github/jaroslavtyc/granam-exceptions-hierarchy/badges/coverage.svg)](https://codeclimate.com/github/jaroslavtyc/granam-exceptions-hierarchy/coverage)
+[![License](https://poser.pugx.org/granam/exceptions-hierarchy/license)](https://packagist.org/packages/granam/exceptions-hierarchy)
 
 Philosophy of exception hierarchy is kind of *you need to know*.
 
