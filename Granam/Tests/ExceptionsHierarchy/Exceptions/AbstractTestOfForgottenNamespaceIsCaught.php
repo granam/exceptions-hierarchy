@@ -2,12 +2,19 @@
 namespace Granam\Tests\ExceptionsHierarchy\Exceptions;
 
 use Granam\ExceptionsHierarchy\TestOfExceptionsHierarchy;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractTestOfForgottenNamespaceIsCaught extends \PHPUnit_Framework_TestCase
+abstract class AbstractTestOfForgottenNamespaceIsCaught extends TestCase
 {
 
+    /**
+     * @return string
+     */
     abstract protected function getTestedNamespace();
 
+    /**
+     * @return string
+     */
     abstract protected function getRootNamespace();
 
     /**

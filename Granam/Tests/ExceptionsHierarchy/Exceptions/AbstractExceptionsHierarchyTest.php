@@ -2,8 +2,9 @@
 namespace Granam\Tests\ExceptionsHierarchy\Exceptions;
 
 use Granam\ExceptionsHierarchy\TestOfExceptionsHierarchy;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractExceptionsHierarchyTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractExceptionsHierarchyTest extends TestCase
 {
 
     /**
